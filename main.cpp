@@ -39,7 +39,7 @@ int main()
     });
 
     CROW_ROUTE(app, "/graphNetwork")([](crow::response& res){
-                        res.set_static_file_info("network/netgraph.xml"); //netgraph
+                        res.set_static_file_info_unsafe("../network/netgraph.xml"); //netgraph
                         res.end();
                     });
 
