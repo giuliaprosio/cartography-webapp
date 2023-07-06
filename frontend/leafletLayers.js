@@ -1,6 +1,7 @@
-
-let map; 
+let map;
 let layerGraph;
+
+import L from "leaflet";
 
 export function init(){
     map = L.map("map").setView([48.83, 2.35], 14);

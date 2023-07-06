@@ -14,10 +14,11 @@ module.exports = {
       patterns: [
         "index.html",
         "stylesheet.css",
+        "node_modules/leaflet/dist/leaflet.css",
       ],
       options: {
         concurrency: 100,
       },
     }),
-]
+],
 };
