@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:msg="http://www.green-communications.fr/graphmsg/ns">
+<key id="key1" for="node" attr.name="is-self" attr.type="boolean">
+	<desc>Indicate if the node is this server</desc>
+	<default>false</default>
+</key>
+<key id="key2" for="node" attr.name="hostname" attr.type="string">
+	<desc>Hostname</desc>
+	<default></default>
+</key>
+<key id="key3" for="node" attr.name="main-ip-addr" attr.type="string">
+	<desc>Main IP address of the host</desc>
+</key>
+<key id="key4" for="node" attr.name="vcards" attr.type="string">
+	<desc>Vcards for the host</desc>
+	<default></default>
+</key>
+<key id="key5" for="node" attr.name="messages">
+	<desc>Messages related to this host</desc>
+	<default></default>
+</key>
+<key id="key6" for="edge" attr.name="max-signal" attr.type="double">
+	<desc>Received signal level by the target of the link. If both hosts have multiple interfaces, the highest signal level is reported</desc>
+	<default>-Infinity</default>
+</key>
+<key id="key7" for="edge" attr.name="qos-string" attr.type="string">
+	<desc>Human-readable string indicating the link(s) quality</desc>
+	<default></default>
+</key>
+<key id="key0" attr.name="type" attr.type="string">
+	<desc>For a node, indicates if it is part of the backhaul, or an associated station, or an external network.  For a link, indicates if it is part of the local and/or global topology, or if asymmetric</desc>
+</key>
+<key id="key8" for="node" attr.name="vlan-id" attr.type="int">
+	<desc>The VLAN ID to which the node (station or gate) belongs</desc>
+	<default>0</default>
+</key>
+<key id="key9" for="node" attr.name="mac-addr" attr.type="string">
+	<desc>The MAC address of the station</desc>
+	<default></default>
+</key>
+<key id="key10" for="node" attr.name="addresses" attr.type="string">
+	<desc>Other addresses of this host</desc>
+	<default></default>
+</key>
+<graph edgedefault="directed" parse.nodeids="canonical" parse.edgeids="canonical" parse.order="nodesfirst">
+	<node id="n0">
+		<data key="key0">backhaul</data>
+		<data key="key2">YOI-B4MESH-2.gnyoi.com</data>
+		<data key="key3">10.154.134.26</data>
+		<data key="key4"></data>
+		<data key="key5">
+			<msg:message key="df">{ &quot;/var/persistent-data&quot;: [&quot;/dev/mmcblk0p1&quot;, 31275274240, 176574464, 29486383104, 1, &quot;/var/persistent-data&quot;] }</msg:message>
+			<msg:message key="host_info">{&quot;fqdn&quot;:&quot;YOI-B4MESH-2.gnyoi.com&quot;,&quot;first_label&quot;:&quot;YOI-B4MESH-2&quot;}</msg:message>
+			<msg:message key="temperature">{&quot;sbc&quot;:37,&quot;cpu&quot;:47}</msg:message>
+			<msg:message key="vcard-default">{&quot;default&quot;:&quot;BEGIN:VCARD\nVERSION:4.0\nFN:YOI-B4MESH-2\nKIND:device\nPHOTO:http://gnyoi.com/images/machines/indoorv3.png\nEND:VCARD\n&quot;}</msg:message>
+			<msg:message key="voltage">{&quot;input&quot;:12.924,&quot;falling&quot;: false,&quot;bat&quot;:16777.215}</msg:message>
+		</data>
+		<data key="key10"></data>
+	</node>
+	<node id="n1">
+		<data key="key0">backhaul</data>
+		<data key="key1">true</data>
+		<data key="key2">YOI-B4MESH-1.gnyoi.com</data>
+		<data key="key3">10.181.178.217</data>
+		<data key="key4"></data>
+		<data key="key5">
+			<msg:message key="df">{ &quot;/var/persistent-data&quot;: [&quot;/dev/mmcblk0p1&quot;, 31275274240, 184115200, 29478842368, 1, &quot;/var/persistent-data&quot;] }</msg:message>
+			<msg:message key="host_info">{&quot;fqdn&quot;:&quot;YOI-B4MESH-1.gnyoi.com&quot;,&quot;first_label&quot;:&quot;YOI-B4MESH-1&quot;}</msg:message>
+			<msg:message key="temperature">{&quot;sbc&quot;:38,&quot;cpu&quot;:51}</msg:message>
+			<msg:message key="vcard-default">{&quot;default&quot;:&quot;BEGIN:VCARD\nVERSION:4.0\nFN:YOI-B4MESH-1\nKIND:device\nPHOTO:http://gnyoi.com/images/machines/indoorv3.png\nEND:VCARD\n&quot;}</msg:message>
+			<msg:message key="voltage">{&quot;input&quot;:12.756,&quot;falling&quot;: false,&quot;bat&quot;:16777.215}</msg:message>
+		</data>
+		<data key="key10"></data>
+	</node>
+	<node id="n2">
+		<data key="key0">station</data>
+		<data key="key2">spectregiulia</data>
+		<data key="key3">127.0.0.1</data>
+		<data key="key8">0</data>
+		<data key="key9">d4:54:8b:55:bc:fc</data>
+	</node>
+	<node id="n3">
+		<data key="key0">backhaul</data>
+		<data key="key2">YOI-B4MESH-3.gnyoi.com</data>
+		<data key="key3">10.181.172.130</data>
+		<data key="key4"></data>
+		<data key="key5">
+			<msg:message key="df">{ &quot;/var/persistent-data&quot;: [&quot;/dev/mmcblk0p1&quot;, 31275364352, 399958016, 29263089664, 2, &quot;/var/persistent-data&quot;] }</msg:message>
+			<msg:message key="host_info">{&quot;fqdn&quot;:&quot;YOI-B4MESH-3.gnyoi.com&quot;,&quot;first_label&quot;:&quot;YOI-B4MESH-3&quot;}</msg:message>
+			<msg:message key="temperature">{&quot;sbc&quot;:37,&quot;cpu&quot;:44}</msg:message>
+			<msg:message key="vcard-default">{&quot;default&quot;:&quot;BEGIN:VCARD\nVERSION:4.0\nFN:YOI-B4MESH-3\nKIND:device\nPHOTO:http://gnyoi.com/images/machines/indoorv3.png\nEND:VCARD\n&quot;}</msg:message>
+			<msg:message key="voltage">{&quot;input&quot;:12.814,&quot;falling&quot;: false,&quot;bat&quot;:16777.215}</msg:message>
+		</data>
+		<data key="key10"></data>
+	</node>
+	<node id="n4">
+		<data key="key0">backhaul</data>
+		<data key="key2">YOI-B4MESH-4.gnyoi.com</data>
+		<data key="key3">10.154.134.170</data>
+		<data key="key4"></data>
+		<data key="key5">
+			<msg:message key="df">{ &quot;/var/persistent-data&quot;: [&quot;/dev/mmcblk0p1&quot;, 31278419968, 152788992, 29513158656, 1, &quot;/var/persistent-data&quot;] }</msg:message>
+			<msg:message key="host_info">{&quot;fqdn&quot;:&quot;YOI-B4MESH-4.gnyoi.com&quot;,&quot;first_label&quot;:&quot;YOI-B4MESH-4&quot;}</msg:message>
+			<msg:message key="temperature">{&quot;sbc&quot;:35,&quot;cpu&quot;:46}</msg:message>
+			<msg:message key="vcard-default">{&quot;default&quot;:&quot;BEGIN:VCARD\nVERSION:4.0\nFN:YOI-B4MESH-4\nKIND:device\nPHOTO:http://gnyoi.com/images/machines/indoorv3.png\nEND:VCARD\n&quot;}</msg:message>
+			<msg:message key="voltage">{&quot;input&quot;:12.633,&quot;falling&quot;: false,&quot;bat&quot;:16777.215}</msg:message>
+		</data>
+		<data key="key10"></data>
+	</node>
+	<edge id="e0" source="n1" target="n0">
+		<data key="key6">-45.000000</data>
+		<data key="key7">-45 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e1" source="n0" target="n1">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e2" source="n3" target="n1">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e3" source="n3" target="n0">
+		<data key="key6">-35.000000</data>
+		<data key="key7">-35 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e4" source="n1" target="n3">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e5" source="n0" target="n3">
+		<data key="key6">-30.000000</data>
+		<data key="key7">-30 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e6" source="n4" target="n0">
+		<data key="key6">-45.000000</data>
+		<data key="key7">-45 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e7" source="n1" target="n4">
+		<data key="key6">-45.000000</data>
+		<data key="key7">-45 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e8" source="n3" target="n4">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local+global</data>
+	</edge>
+	<edge id="e9" source="n0" target="n4">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e10" source="n4" target="n1">
+		<data key="key6">-45.000000</data>
+		<data key="key7">-45 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e11" source="n4" target="n3">
+		<data key="key6">-40.000000</data>
+		<data key="key7">-40 dBm</data>
+		<data key="key0">local</data>
+	</edge>
+	<edge id="e12" source="n1" target="n2"></edge>
+</graph></graphml>

@@ -1,0 +1,26 @@
+{
+    "nodes": [
+        {   
+            "type": "user/router",
+            "ip": "nodeIP",
+            "lat": "lat", 
+            "lng": "lng",
+            "acc": "acc", 
+            "ts": "ts"
+        
+        }
+    ],
+
+    "edges": [
+        {
+            "source": "index_node_in_nodes",
+            "sourceLat": "lat",
+            "sourceLng": "lng",
+            "target": "index_node_in_nodes",
+            "destLat": "lat",
+            "destLng": "lng",
+            "rssi": "rssi1",
+            "other-rssi": "rssi2"
+        }
+    ]
+}
