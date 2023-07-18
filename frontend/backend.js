@@ -2,7 +2,7 @@ import graphml from "graphml-js";
 
 export async function getGPSLastSeen() {
    
-    let gpsLastSeenJSON = await fetch("http://localhost:18080/gpsLastSeen", {
+    let gpsLastSeenJSON = await fetch("/gpsLastSeen", {
         method: "GET",
     });
 
@@ -13,7 +13,7 @@ export async function getGPSLastSeen() {
 
 export async function getGraph(){
 
-    let graphNetwork = await fetch("http://localhost:18080/graphNetwork", {
+    let graphNetwork = await fetch("/graphNetwork", {
         method: "GET",
     
     });
@@ -30,7 +30,7 @@ export async function getGraph(){
 
 export async function postGPSLastSeen(payload_coord){
 
-    let res = await fetch("http://localhost:18080/gps", {
+    let res = await fetch("/gps", {
         method: "POST",
         body: payload_coord
     });
@@ -41,7 +41,7 @@ export async function postGPSLastSeen(payload_coord){
 }
 
 export async function getMyIPAddress(){
-    let res = await fetch("http://localhost:18080/ip", {
+    let res = await fetch("/ip", {
         method: "GET", 
     });
 
