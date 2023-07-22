@@ -180,7 +180,7 @@ const successCallback = async (position) => {
 
     LATITUDE = Number(position.coords.latitude);
     LONGITUDE = Number(position.coords.longitude);
-    ACCURACY = Number(position.coords.accuracy<= 20 ? position.coords.accuracy : 10.0); // 
+    ACCURACY = Number(position.coords.accuracy<= 50 ? position.coords.accuracy : 50.0); //
     TIMESTAMP = Number(position.timestamp);
 
 

@@ -56,9 +56,9 @@ export function logicLocalization(gps, graph) {
         let node = graph.nodes[i];
         let nodeIP = node._attributes["main-ip-addr"];
 
-        if (!userNodeIds.includes(node._id) && !isEdgeRouter(node, userNodeIds, graph.edges) && !alreadyDroppedRouters.includes(node._id)) {
+        if (!userNodeIds.includes(node._id) && !isEdgeRouter(node, userNodeIds, graph.edges) && !alreadyDroppedRouters.includes(node._id) && (node._attributes.type !== 'station') && (node._attributes.type !== 'gate')) {
 
-        // otherwise, its a droppable router
+        // otherwise, it's a droppable router
         //create button
             let dropRouter = {};
             dropRouter.ip = nodeIP;
