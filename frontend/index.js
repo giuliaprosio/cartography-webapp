@@ -15,7 +15,7 @@ window.onload = async () => {
     window.layer = layerGraph;
 
     parseGraph();
-    setInterval(parseGraph, 10000); //10 seconds
+    setInterval(parseGraph, 20000); //10 seconds
     window.parseGraph = parseGraph;
 
     async function parseGraph() {
@@ -199,7 +199,7 @@ const errorCallback = (error) => {
 };
 
 
-navigator.geolocation.watchPosition(successCallback, errorCallback, { timeout: 5000 }); //update every 30 seconds
+navigator.geolocation.watchPosition(successCallback, errorCallback, { timeout: 20000 }); //update every 30 seconds
 
 
 
