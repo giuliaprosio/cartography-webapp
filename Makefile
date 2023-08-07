@@ -19,14 +19,14 @@ $(EXEC): | $(if $(IS_GREENSOFT),$(GREENSOFT_CC)) $(BUILD_DIR)
 	cmake --build $(BUILD_DIR)
 
 build-native: $(MAKEFILE_LIST) CMakeLists.txt
-	cmake -S . -B $@
+	cmake -S . -B $@ $(CMAKE_FLAGS)
 
 build-greensoft: $(MAKEFILE_LIST) CMakeLists.txt
-	cmake -S . -B $@ -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
+	cmake -S . -B $@ $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
 $(GREENSOFT_CC): $(GREENSOFT_DIR)
 	make -C $< toolchain
-	make -C $< libcurl-rebuild LIBCURL_VERSION=$(LIBCURL_VERSION)
+	make -C $< libcurl LIBCURL_VERSION=$(LIBCURL_VERSION)
 	touch $@
 
 $(GREENSOFT_DIR): $(GREENSOFT_SDK_TAR)
@@ -37,7 +37,7 @@ $(GREENSOFT_DIR): $(GREENSOFT_SDK_TAR)
 	cp toolchain/libdbus-cpp-e02d9095.tar.gz $@/dl
 	cp toolchain/.config $@
 	cp toolchain/011-fix-sigstksz.patch $@/package/m4
-	echo '$(CURL_HASH)' > $@/package/libcurl/libcurl.hash
+	echo '$(CURL_HASH)' >> $@/package/libcurl/libcurl.hash
 
 cleanall: clean cleangreensoft;
 
