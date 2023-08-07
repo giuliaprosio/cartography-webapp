@@ -51,7 +51,7 @@ void broadcastFunc(struct GpsRecord rec){
     struct sockaddr_in server_addr{};
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(portNum);
-    inet_aton("10.255.255.255", &server_addr.sin_addr);
+    inet_aton("255.255.255.255", &server_addr.sin_addr);
     //server_addr.sin_addr.s_addr = inet_addr("10.255.255.255");
 
     int n;
@@ -67,7 +67,12 @@ void broadcastFunc(struct GpsRecord rec){
 
 }
 
-void insertGpsOther(struct GpsRecord recOfOtherUser){
+void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsigned long lastSeenOther){
+    GpsRecord otherRecord;
+    otherRecord.ipAddr = ipOther;
+    otherRecord.lat = latOther;
+    otherRecord.lng = lngOther;
+    otherRecord.lastSeen = lastSeenOther;
     /*GpsRecord recOfOtherUser;
 
     const char *received = "Correctly received by server";
@@ -85,8 +90,8 @@ void insertGpsOther(struct GpsRecord recOfOtherUser){
     //int a = 0;
     while(true){
         if(mtx.try_lock()){
-            gpsRecords[recOfOtherUser.ipAddr] = recOfOtherUser;
-            listOfRecords.push_back(recOfOtherUser);
+            gpsRecords[otherRecord.ipAddr] = otherRecord;
+            listOfRecords.push_back(otherRecord);
             mtx.unlock();
             return;
         }else{
@@ -143,11 +148,17 @@ void listenerFunction() {
                 sleep(2);
                 continue;
             }else{
-                std::string ipOfOther = (recOfOtherUser.ipAddr);
-                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
+                //std::string ipOfOther = htons(recOfOtherUser.ipAddr);
+                double latOther = htons(recOfOtherUser.lat);
+                double lngOther = htons(recOfOtherUser.lng);
+                unsigned long timestampOther = htons(recOfOtherUser.lastSeen);
 
-                std::thread gpsOtherThread(insertGpsOther, recOfOtherUser);
-                gpsOtherThread.detach();
+                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
+                std::cout << "client ip " << ipOfOther << std::endl;
+
+                std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
+                gpsOtherThread.detach();  //.join();
+                break;
             }
 
         } catch (std::exception &err) {
@@ -217,7 +228,7 @@ int main()
                                     std::cout << "my GPS updated" << std::endl;
 
                                     std::thread threadBroadcastSend(broadcastFunc, rec);
-                                    threadBroadcastSend.join();
+                                    threadBroadcastSend.detach();
                                     mtx.unlock();
                                     break;
                                 }else{
@@ -267,18 +278,5 @@ int main()
     //set the port, set the app to run on multiple threads, and run the app
     app.port(18080).multithreaded().run_async();  //run_async() for asynchronous updates - useful with communication also
                                                         // on socket
-
-    //while(true){
-    /*try {
-        std::cout << "creating a listener thread";
-        std::thread threadListener(listenerFunction);
-        threadListener.detach();
-    }catch(std::exception &err){
-        cout << "Can't create the thread";
-    }*/
-    //}
-
-
-    //return 0;
 
 }
