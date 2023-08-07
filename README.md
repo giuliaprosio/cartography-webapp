@@ -4,12 +4,11 @@
 
 - CMake
 - libCURL
-- libASIO
 
 Install on Debian and derivatives:
 
 ```
-sudo apt install cmake libcurl4-openssl-dev libasio-dev
+sudo apt install cmake libcurl4-openssl-dev
 ```
 
 ## Build
@@ -17,6 +16,6 @@ sudo apt install cmake libcurl4-openssl-dev libasio-dev
 ```
 mkdir build
 cd build
-cmake .. --DCMAKE_PREFIX=/usr/local
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local
 cmake --build .
 ```
