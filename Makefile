@@ -28,9 +28,8 @@ $(GREENSOFT_CC): $(GREENSOFT_SDK_DIR)
 	make -C $< libcurl LIBCURL_VERSION=$(LIBCURL_VERSION)
 	touch $@
 
-$(GREENSOFT_SDK_DIR): $(GREENSOFT_SDK_TAR)
+$(GREENSOFT_SDK_DIR):
 	tar -xvf $(GREENSOFT_SDK_TAR)
-	rm $@ -rf
 	mv $(GREENSOFT_SDK) $@
 	mkdir -p $@/dl
 	cp toolchain/libdbus-cpp-e02d9095.tar.gz $@/dl
