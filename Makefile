@@ -7,6 +7,7 @@ LIBCURL_VERSION    = 8.1.2
 CURL_HASH          = sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
 TARGETS            = native greensoft
 BUILD_DIRS         = $(patsubst %,build-%,$(TARGETS))
+CMAKE_FLAGS       ?=
 
 .DEFAULT_GOAL      = native
 

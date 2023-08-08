@@ -7,9 +7,7 @@
 
 Install on Debian and derivatives:
 
-```
-sudo apt install cmake libcurl4-openssl-dev
-```
+    sudo apt install cmake libcurl4-openssl-dev
 
 ## Build
 
