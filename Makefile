@@ -4,7 +4,6 @@ GREENSOFT_SDK_TAR  = toolchain/$(GREENSOFT_SDK).tar.xz
 GREENSOFT_CC       = $(GREENSOFT_SDK_DIR)/output/host/bin/arm-buildroot-linux-uclibcgnueabi-gcc
 GREENSOFT_ROOT     = $(GREENSOFT_SDK_DIR)/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot
 LIBCURL_VERSION    = 8.1.2
-CURL_HASH          = sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
 TARGETS            = native greensoft
 BUILD_DIRS         = $(patsubst %,build-%,$(TARGETS))
 CMAKE_FLAGS       ?=
@@ -31,10 +30,9 @@ $(GREENSOFT_SDK_DIR):
 	tar -xvf $(GREENSOFT_SDK_TAR)
 	mv $(GREENSOFT_SDK) $@
 	mkdir -p $@/dl
-	cp toolchain/libdbus-cpp-e02d9095.tar.gz $@/dl
 	cp toolchain/.config $@
 	cp toolchain/011-fix-sigstksz.patch $@/package/m4
-	echo '$(CURL_HASH)' >> $@/package/libcurl/libcurl.hash
+	cat toolchain/libcurl.hash >> $@/package/libcurl/libcurl.hash
 
 cleanall: clean cleangreensoftsdk;
 
