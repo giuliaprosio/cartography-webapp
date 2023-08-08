@@ -40,7 +40,7 @@ clean: cleanbuild
 	rm -rf $(BUILD_DIRS)
 
 cleanbuild:
-	for d in $(BUILD_DIRS); do cmake --build $$d --target clean; done
+	for d in $(wildcard build-*); do cmake --build $$d --target clean; done
 
 cleangreensoftsdk:
 	rm -rf $(GREENSOFT_SDK_DIR)
