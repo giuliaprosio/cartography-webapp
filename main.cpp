@@ -9,6 +9,7 @@
 #include <thread>
 #include <mutex>
 #include <list>
+#include <ifaddrs.h>
 #include "curl4.hpp"
 
 using namespace crow::json;
@@ -30,6 +31,7 @@ std::list<GpsRecord> listOfRecords;
 //GpsRecord rec;
 
 std::mutex mtx;
+
 
 void broadcastFunc(struct GpsRecord rec){
     int portNum = 5555;
@@ -106,6 +108,18 @@ void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsig
 }
 
 void listenerFunction() {
+
+    //own ip address resolver
+    char host[256];
+    char *IP;
+    struct hostent *host_entry;
+    int hostname;
+    hostname = gethostname(host, sizeof(host));
+    host_entry = gethostbyname(host);
+    IP = inet_ntoa(*((struct in_addr*) host_entry ->h_addr_list[0]));
+    std::string myIP = IP;
+    printf("current host IP: %s\n ", IP);
+
     //creates a thread for each socket incoming
     int socketFd;
     int portNum = 5555;
@@ -140,6 +154,39 @@ void listenerFunction() {
             GpsRecord recOfOtherUser;
 
             //const char *received = "Correctly received by server";
+            //----------------------------------------
+            struct ifaddrs *ifaddr, *ifa;
+            int family, s;
+            char host[NI_MAXHOST];
+
+            if (getifaddrs(&ifaddr) == -1)
+            {
+                perror("getifaddrs");
+                exit(EXIT_FAILURE);
+            }
+
+
+            for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
+            {
+                if (ifa->ifa_addr == NULL)
+                    continue;
+
+                s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+
+                if((strcmp(ifa->ifa_name,"wlp3s0")==0)&&(ifa->ifa_addr->sa_family==AF_INET))
+                {
+                    if (s != 0)
+                    {
+                        printf("getnameinfo() failed: %s\n", gai_strerror(s));
+                        exit(EXIT_FAILURE);
+                    }
+                    printf("\tInterface : <%s>\n",ifa->ifa_name );
+                    printf("\t  Address : <%s>\n", host);
+                }
+            }
+
+            //freeifaddrs(ifaddr);
+            //---------------------------------------
 
             struct sockaddr_in cliaddr;
             socklen_t len;
@@ -148,22 +195,35 @@ void listenerFunction() {
             len = sizeof(cliaddr);
             n = recvfrom(socketFd, (char *) &recOfOtherUser, sizeof(recOfOtherUser), MSG_WAITALL,
                          (struct sockaddr *) &cliaddr, &len);
+
+            char* ipString = inet_ntoa(cliaddr.sin_addr);
+            printf("current client IP: %s\n ", ipString);
+
             if(n <= 0 ){ //no client data to process
                 std::cout << "no other user data to process";
                 sleep(2);
                 continue;
+            }else if(ipString == host){
+
+                continue;
+
             }else{
                 std::string ipOfOther = (recOfOtherUser.ipAddr);
-                double latOther = (recOfOtherUser.lat);
-                double lngOther = (recOfOtherUser.lng);
-                unsigned long timestampOther = (recOfOtherUser.lastSeen);
+                //if(ipOfOther == "10.0.0.230"){ //10.0.0.145
+                //    continue;
+                //}else{
+                    double latOther = (recOfOtherUser.lat);
+                    double lngOther = (recOfOtherUser.lng);
+                    unsigned long timestampOther = (recOfOtherUser.lastSeen);
 
-                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
-                std::cout << "client ip " << ipOfOther << std::endl;
+                    std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
+                    std::cout << "client ip " << ipOfOther << std::endl;
 
-                std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
-                gpsOtherThread.detach();  //.join();
-                continue;
+                    std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
+                    gpsOtherThread.detach();  //.join();
+                    continue;
+                //}
+
             }
 
         } catch (std::exception &err) {
@@ -175,6 +235,7 @@ void listenerFunction() {
 int main()
 {
     crow::App<crow::CORSHandler> app;
+
 
     CROW_ROUTE(app, "/")([](crow::response& res){
         res.set_static_file_info("static/index.html");
