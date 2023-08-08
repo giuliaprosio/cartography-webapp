@@ -6,21 +6,19 @@ GREENSOFT_ROOT     = $(GREENSOFT_SDK_DIR)/output/host/arm-buildroot-linux-uclibc
 LIBCURL_VERSION    = 8.1.2
 CURL_HASH          = sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz
 TARGETS            = native greensoft
+BUILD_DIRS         = $(patsubst %,build-%,$(TARGETS))
 
-ifneq (,$(filter greensoft,$(MAKECMDGOALS)))
-IS_GREENSOFT      = yes
-endif
+.DEFAULT_GOAL      = native
 
-.DEFAULT: native
+all: $(TARGETS)
 
-.PHONY: $(TARGETS)
-$(TARGETS): %: build-% $(if $(IS_GREENSOFT),$(GREENSOFT_CC))
+$(TARGETS): %: build-%
 	cmake --build $<
 
 build-native: $(MAKEFILE_LIST) CMakeLists.txt
 	cmake -S . -B $@ $(CMAKE_FLAGS)
 
-build-greensoft: $(MAKEFILE_LIST) CMakeLists.txt
+build-greensoft: $(MAKEFILE_LIST) CMakeLists.txt $(GREENSOFT_CC)
 	cmake -S . -B $@ $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
 $(GREENSOFT_CC): $(GREENSOFT_SDK_DIR)
@@ -39,11 +37,13 @@ $(GREENSOFT_SDK_DIR):
 
 cleanall: clean cleangreensoftsdk;
 
-clean:
-	rm -rf $(TARGETS:%=build-%)
-	rm $(EXEC)
+clean: cleanbuild
+	rm -rf $(BUILD_DIRS)
+
+cleanbuild:
+	for d in $(BUILD_DIRS); do cmake --build $$d --target clean; done
 
 cleangreensoftsdk:
 	rm -rf $(GREENSOFT_SDK_DIR)
 
-.PHONY: cleanall clean cleangreensoftsdk
+.PHONY: all $(TARGETS) cleanall clean cleanbuild cleangreensoftsdk
