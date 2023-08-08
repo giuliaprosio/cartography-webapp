@@ -332,5 +332,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/intellij+all,clion,cmake,node
 
 static/
-greensoft
+greensoft-sdk
 !/Makefile
