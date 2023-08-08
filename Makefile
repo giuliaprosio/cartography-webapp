@@ -39,10 +39,12 @@ cleanall: clean cleangreensoftsdk;
 clean: cleanbuild
 	rm -rf $(BUILD_DIRS)
 
-cleanbuild:
-	for d in $(wildcard build-*); do cmake --build $$d --target clean; done
+cleanbuild: $(patsubst %,clean-%,$(wildcard $(BUILD_DIRS)));
+
+clean-%:
+	-cmake --build $* --target clean
 
 cleangreensoftsdk:
 	rm -rf $(GREENSOFT_SDK_DIR)
 
-.PHONY: all $(TARGETS) cleanall clean cleanbuild cleangreensoftsdk
+.PHONY: all $(TARGETS) cleanall clean cleanbuild clean-% cleangreensoftsdk
