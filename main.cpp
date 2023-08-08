@@ -11,12 +11,12 @@
 #include <list>
 #include "curl4.hpp"
 
-using namespace std;
 using namespace crow::json;
 
 struct GpsRecord {
 
-    std::string ipAddr;
+    //std::string ipAddr;
+    char ipAddr[256];
     double lat;
     double lng;
     double acc;
@@ -27,7 +27,7 @@ std::unordered_map<std::string, GpsRecord> gpsRecords;
 std::list<GpsRecord> listOfRecords;
 
 
-GpsRecord rec;
+//GpsRecord rec;
 
 std::mutex mtx;
 
@@ -44,7 +44,7 @@ void broadcastFunc(struct GpsRecord rec){
 
     int ret = setsockopt(otherSocketFd, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable));
     if(ret < 0){
-        std::cerr << "Error in setting broadcast option" << endl;
+        std::cerr << "Error in setting broadcast option" << std::endl;
         return;
     }
 
@@ -69,7 +69,9 @@ void broadcastFunc(struct GpsRecord rec){
 
 void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsigned long lastSeenOther){
     GpsRecord otherRecord;
-    otherRecord.ipAddr = ipOther;
+    //otherRecord.ipAddr = ipOther;
+    std::string ipOfOther = ipOther; //req.remote_ip_address;
+    strcpy(otherRecord.ipAddr, ipOfOther.c_str());
     otherRecord.lat = latOther;
     otherRecord.lng = lngOther;
     otherRecord.lastSeen = lastSeenOther;
@@ -116,6 +118,7 @@ void listenerFunction() {
         return;
     }
     std::cout << "Done up to this point" << std::endl;
+    memset(&servaddr, 0, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
@@ -131,6 +134,8 @@ void listenerFunction() {
 
     while (true){
         try {
+
+
             std::cout << "ready to receive from client" << std::endl;
             GpsRecord recOfOtherUser;
 
@@ -148,17 +153,17 @@ void listenerFunction() {
                 sleep(2);
                 continue;
             }else{
-                //std::string ipOfOther = htons(recOfOtherUser.ipAddr);
-                double latOther = htons(recOfOtherUser.lat);
-                double lngOther = htons(recOfOtherUser.lng);
-                unsigned long timestampOther = htons(recOfOtherUser.lastSeen);
+                std::string ipOfOther = (recOfOtherUser.ipAddr);
+                double latOther = (recOfOtherUser.lat);
+                double lngOther = (recOfOtherUser.lng);
+                unsigned long timestampOther = (recOfOtherUser.lastSeen);
 
                 std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
                 std::cout << "client ip " << ipOfOther << std::endl;
 
                 std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
                 gpsOtherThread.detach();  //.join();
-                break;
+                continue;
             }
 
         } catch (std::exception &err) {
@@ -170,11 +175,6 @@ void listenerFunction() {
 int main()
 {
     crow::App<crow::CORSHandler> app;
-
-    //socket managing as server side: waiting for other routers
-    //to send data of other users
-
-    //define your endpoint at the root directory (app, url)
 
     CROW_ROUTE(app, "/")([](crow::response& res){
         res.set_static_file_info("static/index.html");
@@ -214,8 +214,12 @@ int main()
                             return crow::response(400);
 
                         try {
+                            GpsRecord rec;
+                            //rec.ipAddr = payload["userIP"].s(); //req.remote_ip_address;
+                            std::string ip = payload["userIP"].s(); //req.remote_ip_address;
 
-                            rec.ipAddr = payload["userIP"].s(); //req.remote_ip_address;
+                            strcpy(rec.ipAddr, ip.c_str());
+                            //rec.ipAddr = ip;
                             rec.lat = payload["lat"].d();
                             rec.lng = payload["long"].d();
                             rec.acc = payload["acc"].d();
@@ -234,7 +238,6 @@ int main()
                                 }else{
                                     sleep(2);
                                 }
-                                break;
                             }
 
                         } catch (std::exception &err) {
@@ -272,7 +275,7 @@ int main()
         std::thread threadListener(listenerFunction);
         threadListener.detach();
     }catch(std::exception &err){
-        cout << "Can't create the thread";
+        std::cout << "Can't create the thread" << std::endl;
     }
 
     //set the port, set the app to run on multiple threads, and run the app
