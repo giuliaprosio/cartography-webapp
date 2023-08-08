@@ -2,10 +2,8 @@ cmake_minimum_required(VERSION 3.25)
 project(webapp)
 include(FetchContent)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1) # Let other programs know how to compile
 set(CMAKE_CXX_STANDARD 17)
-
-# Add libcurl
-find_package(CURL REQUIRED)
 
 # Add curl4cpp header only library
 FetchContent_Declare(curl4cpp
@@ -16,6 +14,10 @@ FetchContent_Declare(curl4cpp
 FetchContent_MakeAvailable(curl4cpp)
 add_library(curl4cpp INTERFACE)
 target_include_directories(curl4cpp INTERFACE ${curl4cpp_SOURCE_DIR})
+
+# Make sure CURL package is there and link it to asio
+find_package(CURL REQUIRED)
+target_link_libraries(curl4cpp INTERFACE ${CURL_LIBRARIES})
 
 # Add asio header only library
 FetchContent_Declare(asio
@@ -28,12 +30,12 @@ add_library(asio INTERFACE)
 target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/asio/include)
 
 # Make sure Threads package is there and link it to asio
-find_package(Threads)
+find_package(Threads REQUIRED)
 target_link_libraries(asio INTERFACE Threads::Threads)
 
 add_executable(webapp main.cpp)
 
-target_link_libraries(webapp ${CURL_LIBRARIES} curl4cpp asio)
+target_link_libraries(webapp curl4cpp asio)
 
 set_target_properties(webapp
         PROPERTIES
