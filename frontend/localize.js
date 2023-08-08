@@ -63,7 +63,7 @@ export function logicLocalization(gps, graph) {
             let dropRouter = {};
             dropRouter.ip = nodeIP;
             let stringName = String(node._attributes.hostname);
-            let substringName1 = stringName.substring(7, 12);
+            let substringName1 = stringName.substring(7, 13);
             //let substringName2 = stringName.substring(11, 12);
             let name = substringName1; //.concat(substringName2);
             dropRouter.name = name;
