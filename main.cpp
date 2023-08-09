@@ -11,10 +11,12 @@
 #include <list>
 #include <ifaddrs.h>
 #include "curl4.hpp"
+#include "support_functions.h"
+
 
 using namespace crow::json;
 
-struct GpsRecord {
+/*struct GpsRecord {
 
     //std::string ipAddr;
     char ipAddr[256];
@@ -22,18 +24,15 @@ struct GpsRecord {
     double lng;
     double acc;
     unsigned long lastSeen;
-};
+}; */
 
-std::unordered_map<std::string, GpsRecord> gpsRecords;
+/*std::unordered_map<std::string, GpsRecord> gpsRecords;
 std::list<GpsRecord> listOfRecords;
 
 
-//GpsRecord rec;
+std::mutex mtx; */
 
-std::mutex mtx;
-
-
-void broadcastFunc(struct GpsRecord rec){
+/*void broadcastFunc(struct GpsRecord rec){
     int portNum = 5555;
 
     int otherSocketFd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -65,11 +64,9 @@ void broadcastFunc(struct GpsRecord rec){
     close(otherSocketFd);
     std::cout << "closed" << std::endl;
 
-    return;
+} */
 
-}
-
-void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsigned long lastSeenOther){
+/*void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsigned long lastSeenOther){
     GpsRecord otherRecord;
     //otherRecord.ipAddr = ipOther;
     std::string ipOfOther = ipOther; //req.remote_ip_address;
@@ -89,7 +86,7 @@ void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsig
     n = recvfrom(socketFd, (char *)&recOfOtherUser, sizeof(recOfOtherUser), MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
 
     std::string ipOfOther = (recOfOtherUser.ipAddr);
-    std::cout << "client: " << sizeof(recOfOtherUser) << std::endl; */
+    std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
 
     //int a = 0;
     while(true){
@@ -105,12 +102,12 @@ void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsig
         return;
     }
 
-}
+}*/
 
-void listenerFunction() {
+/*void listenerFunction() {
 
     //own ip address resolver
-    char host[256];
+    /*char host[256];
     char *IP;
     struct hostent *host_entry;
     int hostname;
@@ -149,15 +146,16 @@ void listenerFunction() {
     while (true){
         try {
 
-
             std::cout << "ready to receive from client" << std::endl;
             GpsRecord recOfOtherUser;
 
             //const char *received = "Correctly received by server";
-            //----------------------------------------
-            struct ifaddrs *ifaddr, *ifa;
-            int family, s;
             char host[NI_MAXHOST];
+            thisServerIP(host);
+            //----------------------------------------
+            /*struct ifaddrs *ifaddr, *ifa;
+            int family, s;
+
 
             if (getifaddrs(&ifaddr) == -1)
             {
@@ -184,7 +182,6 @@ void listenerFunction() {
                     printf("\t  Address : <%s>\n", host);
                 }
             }
-
             //freeifaddrs(ifaddr);
             //---------------------------------------
 
@@ -208,21 +205,18 @@ void listenerFunction() {
                 continue;
 
             }else{
+
                 std::string ipOfOther = (recOfOtherUser.ipAddr);
-                //if(ipOfOther == "10.0.0.230"){ //10.0.0.145
-                //    continue;
-                //}else{
-                    double latOther = (recOfOtherUser.lat);
-                    double lngOther = (recOfOtherUser.lng);
-                    unsigned long timestampOther = (recOfOtherUser.lastSeen);
+                double latOther = (recOfOtherUser.lat);
+                double lngOther = (recOfOtherUser.lng);
+                unsigned long timestampOther = (recOfOtherUser.lastSeen);
 
-                    std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
-                    std::cout << "client ip " << ipOfOther << std::endl;
+                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
+                std::cout << "client ip " << ipOfOther << std::endl;
 
-                    std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
-                    gpsOtherThread.detach();  //.join();
-                    continue;
-                //}
+                std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
+                gpsOtherThread.detach();  //.join();
+                continue;
 
             }
 
@@ -230,7 +224,7 @@ void listenerFunction() {
             std::cerr << "Generic error" << std::endl;
         }
     }
-}
+} */
 
 int main()
 {
@@ -292,7 +286,7 @@ int main()
                                     listOfRecords.push_back(rec);
                                     std::cout << "my GPS updated" << std::endl;
 
-                                    std::thread threadBroadcastSend(broadcastFunc, rec);
+                                    std::thread threadBroadcastSend(broadcasting, rec);
                                     threadBroadcastSend.detach();
                                     mtx.unlock();
                                     break;
@@ -333,7 +327,7 @@ int main()
     // router listen thread creation here
     try {
         std::cout << "creating a listener thread";
-        std::thread threadListener(listenerFunction);
+        std::thread threadListener(listener);
         threadListener.detach();
     }catch(std::exception &err){
         std::cout << "Can't create the thread" << std::endl;

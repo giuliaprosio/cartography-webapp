@@ -14,7 +14,7 @@ include_directories(/home/giuli/Downloads/asio/asio/include/)
 include_directories(/home/giuli/Downloads/curl-8.1.2/include/)
 include_directories(/home/giuli/Downloads/curl4cpp/)
 include_directories(/home/giuli/Downloads/greensoft/output/build/buildroot-config/br2/package)
-add_executable(webapp main.cpp functions.h functions.cpp)
+add_executable(webapp main.cpp support_functions.h server_ip_solver.cpp broadcasting_struct.cpp listener_udp.cpp geodata_insert.cpp)
 #target_link_libraries(webapp OpenSSL)
 
 include_directories(${CURL_INCLUDE_DIR})

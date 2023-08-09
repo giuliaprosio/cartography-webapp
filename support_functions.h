@@ -23,6 +23,10 @@ struct GpsRecord {
     unsigned long lastSeen;
 };
 
+extern std::unordered_map<std::string, GpsRecord> gpsRecords;
+extern std::list<GpsRecord> listOfRecords;
+extern std::mutex mtx;
+
 //BROADCASTING FUNCTION
 void broadcasting(struct GpsRecord);
 
@@ -31,3 +35,6 @@ void thisServerIP(char *);
 
 //INCOMING UDP LISTENER
 void listener();
+
+//GEOLOCATION DATA INSERT IN STRUCT
+void insertGpsOther(std::string, double, double, double, unsigned long);
