@@ -1,9 +1,13 @@
 #include "support_functions.h"
 
+std::unordered_map<std::string, GpsRecord> gpsRecords = {};
+std::list<GpsRecord> listOfRecords = {};
+std::mutex mtx;
+
 void insertGpsOther(std::string ipOther, double latOther, double lngOther, double accOther, unsigned long lastSeenOther){
     GpsRecord otherRecord;
-    //otherRecord.ipAddr = ipOther;
-    std::string ipOfOther = ipOther; //req.remote_ip_address;
+
+    std::string ipOfOther = ipOther;
     strcpy(otherRecord.ipAddr, ipOfOther.c_str());
     otherRecord.lat = latOther;
     otherRecord.lng = lngOther;
@@ -26,6 +30,7 @@ void insertGpsOther(std::string ipOther, double latOther, double lngOther, doubl
     //int a = 0;
     while(true){
         if(mtx.try_lock()){
+
             gpsRecords[otherRecord.ipAddr] = otherRecord;
             listOfRecords.push_back(otherRecord);
             mtx.unlock();

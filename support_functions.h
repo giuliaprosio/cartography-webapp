@@ -25,7 +25,7 @@ struct GpsRecord {
 
 extern std::unordered_map<std::string, GpsRecord> gpsRecords;
 extern std::list<GpsRecord> listOfRecords;
-extern std::mutex mtx;
+//extern std::mutex mtx;
 
 //BROADCASTING FUNCTION
 void broadcasting(struct GpsRecord);

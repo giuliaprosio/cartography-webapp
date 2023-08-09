@@ -280,7 +280,13 @@ int main()
                             rec.acc = payload["acc"].d();
                             rec.lastSeen = payload["last_seen"].u();
 
-                            while(true){
+                            std::thread threadInsertUserData(insertGpsOther, rec.ipAddr, rec.lat, rec.lng, rec.acc, rec.lastSeen);
+                            threadInsertUserData.detach();
+
+                            std::thread threadBroadcastSend(broadcasting, rec);
+                            threadBroadcastSend.detach();
+
+                            /*while(true){
                                 if(mtx.try_lock()){
                                     gpsRecords[rec.ipAddr] = rec;
                                     listOfRecords.push_back(rec);
@@ -293,7 +299,7 @@ int main()
                                 }else{
                                     sleep(2);
                                 }
-                            }
+                            } */
 
                         } catch (std::exception &err) {
                             CROW_LOG_INFO << "Error while parsing GPS record";
