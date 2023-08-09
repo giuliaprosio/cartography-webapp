@@ -6,6 +6,7 @@ GREENSOFT_ROOT     = $(GREENSOFT_SDK_DIR)/output/host/arm-buildroot-linux-uclibc
 LIBCURL_VERSION    = 8.1.2
 TARGETS            = native greensoft
 BUILD_DIRS         = $(patsubst %,build-%,$(TARGETS))
+JOBS              ?= $(shell nproc)
 CMAKE_FLAGS       ?=
 
 .DEFAULT_GOAL      = native
@@ -13,7 +14,7 @@ CMAKE_FLAGS       ?=
 all: $(TARGETS)
 
 $(TARGETS): %: build-%
-	cmake --build $<
+	cmake --build $< --parallel $(JOBS)
 
 build-native: $(MAKEFILE_LIST) CMakeLists.txt
 	cmake -S . -B $@ $(CMAKE_FLAGS)
