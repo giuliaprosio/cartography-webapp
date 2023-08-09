@@ -1,3 +1,5 @@
+include frontend/.phony.mk
+
 GREENSOFT_SDK_DIR ?= greensoft-sdk
 GREENSOFT_SDK      = greensoft-sdk-2021-01-25-14ae3
 GREENSOFT_SDK_TAR  = toolchain/$(GREENSOFT_SDK).tar.xz
@@ -11,15 +13,18 @@ CMAKE_FLAGS       ?=
 
 .DEFAULT_GOAL      = native
 
-all: $(TARGETS)
+all: $(TARGETS);
 
-$(TARGETS): %: build-%
+frontend:
+	$(MAKE) -C $@ $(filter $(FRONTEND_PHONY),$(MAKECMDGOALS))
+
+$(TARGETS): %: build-% frontend
 	cmake --build $< --parallel $(JOBS)
 
-build-native: $(MAKEFILE_LIST) CMakeLists.txt
+build-native: Makefile CMakeLists.txt
 	cmake -S . -B $@ $(CMAKE_FLAGS)
 
-build-greensoft: $(MAKEFILE_LIST) CMakeLists.txt $(GREENSOFT_CC)
+build-greensoft: Makefile CMakeLists.txt $(GREENSOFT_CC)
 	cmake -S . -B $@ $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
 $(GREENSOFT_CC): $(GREENSOFT_SDK_DIR)
@@ -35,12 +40,12 @@ $(GREENSOFT_SDK_DIR):
 	cp toolchain/011-fix-sigstksz.patch $@/package/m4
 	cat toolchain/libcurl.hash >> $@/package/libcurl/libcurl.hash
 
-cleanall: clean cleangreensoftsdk;
+cleanall: clean cleangreensoftsdk frontend;
 
-clean: cleanbuild
+clean: cleanbuild frontend
 	rm -rf $(BUILD_DIRS)
 
-cleanbuild: $(patsubst %,clean-%,$(wildcard $(BUILD_DIRS)));
+cleanbuild: $(patsubst %,clean-%,$(wildcard $(BUILD_DIRS))) frontend;
 
 clean-%:
 	-cmake --build $* --target clean
@@ -48,4 +53,4 @@ clean-%:
 cleangreensoftsdk:
 	rm -rf $(GREENSOFT_SDK_DIR)
 
-.PHONY: all $(TARGETS) cleanall clean cleanbuild clean-% cleangreensoftsdk
+.PHONY: all $(TARGETS) frontend cleanall clean cleanbuild clean-% cleangreensoftsdk

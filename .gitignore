@@ -334,3 +334,4 @@ dist
 static/
 greensoft-sdk
 !/Makefile
+!/frontend/Makefile
