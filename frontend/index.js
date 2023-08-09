@@ -22,6 +22,7 @@ window.onload = async () => {
 
         let gpsLastSeen = await backend.getGPSLastSeen();
         let graph = await backend.getGraph();
+        let serverIP = await backend.getServerIPAddress();
         console.log("gpslastseen: ", gpsLastSeen);
         console.log("graph: ", graph);
         //at this point I have both GPSLastSeen and graphxml

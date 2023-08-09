@@ -5,7 +5,7 @@
 void thisServerIP(char * host){
     struct ifaddrs *ifaddr, *ifa;
     int family, s;
-    //char host[NI_MAXHOST];
+    char tmp[NI_MAXHOST];
 
     if (getifaddrs(&ifaddr) == -1)
     {
@@ -19,7 +19,7 @@ void thisServerIP(char * host){
         if (ifa->ifa_addr == NULL)
             continue;
 
-        s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+        s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),tmp, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 
         if((strcmp(ifa->ifa_name,"wlp3s0")==0)&&(ifa->ifa_addr->sa_family==AF_INET))
         {
@@ -29,6 +29,7 @@ void thisServerIP(char * host){
                 exit(EXIT_FAILURE);
             }
             printf("\tInterface : <%s>\n",ifa->ifa_name );
+            strcpy(host, tmp);
             printf("\t  Address : <%s>\n", host);
         }
     }

@@ -47,3 +47,11 @@ export async function getMyIPAddress(){
 
     return await res.text();
 }
+
+export async function getServerIPAddress(){
+    let res = await fetch("/serverIP", {
+        method: "GET",
+    });
+
+    return await res.text();
+}
