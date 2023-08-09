@@ -100,7 +100,7 @@ void listener(){
                 std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
                 std::cout << "client ip " << ipOfOther << std::endl;
 
-                std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, accOther, timestampOther);
+                std::thread gpsOtherThread(insertGps, ipOfOther, latOther, lngOther, accOther, timestampOther);
                 gpsOtherThread.detach();  //.join();
                 continue;
 

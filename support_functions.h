@@ -37,4 +37,4 @@ void thisServerIP(char *);
 void listener();
 
 //GEOLOCATION DATA INSERT IN STRUCT
-void insertGpsOther(std::string, double, double, double, unsigned long);
+void insertGps(std::string, double, double, double, unsigned long);

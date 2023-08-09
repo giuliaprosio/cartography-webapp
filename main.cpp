@@ -4,227 +4,14 @@
 #include <string>
 #include "crow_all.h"
 #include <cstring>
-#include <sys/socket.h>
-#include <netinet/in.h>
 #include <thread>
-#include <mutex>
 #include <list>
-#include <ifaddrs.h>
 #include "curl4.hpp"
 #include "support_functions.h"
 
 
 using namespace crow::json;
 
-/*struct GpsRecord {
-
-    //std::string ipAddr;
-    char ipAddr[256];
-    double lat;
-    double lng;
-    double acc;
-    unsigned long lastSeen;
-}; */
-
-/*std::unordered_map<std::string, GpsRecord> gpsRecords;
-std::list<GpsRecord> listOfRecords;
-
-
-std::mutex mtx; */
-
-/*void broadcastFunc(struct GpsRecord rec){
-    int portNum = 5555;
-
-    int otherSocketFd = socket(AF_INET, SOCK_DGRAM, 0);
-    int broadcastEnable = 1;
-
-    if(otherSocketFd < 0){
-        std::cerr << "Couldn't create socket" << std::endl;
-        return;
-    }
-
-    int ret = setsockopt(otherSocketFd, SOL_SOCKET, SO_BROADCAST, &broadcastEnable, sizeof(broadcastEnable));
-    if(ret < 0){
-        std::cerr << "Error in setting broadcast option" << std::endl;
-        return;
-    }
-
-    struct sockaddr_in server_addr{};
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons(portNum);
-    inet_aton("255.255.255.255", &server_addr.sin_addr);
-    //server_addr.sin_addr.s_addr = inet_addr("10.255.255.255");
-
-    int n;
-    socklen_t len;
-
-    std::cout << "About to send data in broadcast" << server_addr.sin_addr.s_addr << std::endl;
-    sendto(otherSocketFd, (const char *)&rec, sizeof(rec), MSG_CONFIRM, (const struct sockaddr *)&server_addr, sizeof(server_addr));
-    std::cout << "sent" << rec.lat << std::endl;  //let's see what's printing
-    close(otherSocketFd);
-    std::cout << "closed" << std::endl;
-
-} */
-
-/*void insertGpsOther(std::string ipOther, double latOther, double lngOther, unsigned long lastSeenOther){
-    GpsRecord otherRecord;
-    //otherRecord.ipAddr = ipOther;
-    std::string ipOfOther = ipOther; //req.remote_ip_address;
-    strcpy(otherRecord.ipAddr, ipOfOther.c_str());
-    otherRecord.lat = latOther;
-    otherRecord.lng = lngOther;
-    otherRecord.lastSeen = lastSeenOther;
-    /*GpsRecord recOfOtherUser;
-
-    const char *received = "Correctly received by server";
-
-    struct sockaddr_in cliaddr;
-    socklen_t len;
-    int n;
-
-    len = sizeof(cliaddr);
-    n = recvfrom(socketFd, (char *)&recOfOtherUser, sizeof(recOfOtherUser), MSG_WAITALL, (struct sockaddr *)&cliaddr, &len);
-
-    std::string ipOfOther = (recOfOtherUser.ipAddr);
-    std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
-
-    //int a = 0;
-    while(true){
-        if(mtx.try_lock()){
-            gpsRecords[otherRecord.ipAddr] = otherRecord;
-            listOfRecords.push_back(otherRecord);
-            mtx.unlock();
-            return;
-        }else{
-            //a++;
-            sleep(2);
-        }
-        return;
-    }
-
-}*/
-
-/*void listenerFunction() {
-
-    //own ip address resolver
-    /*char host[256];
-    char *IP;
-    struct hostent *host_entry;
-    int hostname;
-    hostname = gethostname(host, sizeof(host));
-    host_entry = gethostbyname(host);
-    IP = inet_ntoa(*((struct in_addr*) host_entry ->h_addr_list[0]));
-    std::string myIP = IP;
-    printf("current host IP: %s\n ", IP);
-
-    //creates a thread for each socket incoming
-    int socketFd;
-    int portNum = 5555;
-
-    struct sockaddr_in servaddr;
-
-    //create socket
-    if ((socketFd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
-        std::cerr << "Couldn't create socket" << std::endl;
-        return;
-    }
-    std::cout << "Done up to this point" << std::endl;
-    memset(&servaddr, 0, sizeof(servaddr));
-
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = INADDR_ANY;
-    servaddr.sin_port = htons(portNum);
-
-    //binding server side
-    if (bind(socketFd, (const struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
-        std::cerr << "Couldn't bind" << std::endl;
-        return;
-    }
-
-    std::cout << "managed to bind" << std::endl;
-
-    while (true){
-        try {
-
-            std::cout << "ready to receive from client" << std::endl;
-            GpsRecord recOfOtherUser;
-
-            //const char *received = "Correctly received by server";
-            char host[NI_MAXHOST];
-            thisServerIP(host);
-            //----------------------------------------
-            /*struct ifaddrs *ifaddr, *ifa;
-            int family, s;
-
-
-            if (getifaddrs(&ifaddr) == -1)
-            {
-                perror("getifaddrs");
-                exit(EXIT_FAILURE);
-            }
-
-
-            for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
-            {
-                if (ifa->ifa_addr == NULL)
-                    continue;
-
-                s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),host, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
-
-                if((strcmp(ifa->ifa_name,"wlp3s0")==0)&&(ifa->ifa_addr->sa_family==AF_INET))
-                {
-                    if (s != 0)
-                    {
-                        printf("getnameinfo() failed: %s\n", gai_strerror(s));
-                        exit(EXIT_FAILURE);
-                    }
-                    printf("\tInterface : <%s>\n",ifa->ifa_name );
-                    printf("\t  Address : <%s>\n", host);
-                }
-            }
-            //freeifaddrs(ifaddr);
-            //---------------------------------------
-
-            struct sockaddr_in cliaddr;
-            socklen_t len;
-            int n;
-
-            len = sizeof(cliaddr);
-            n = recvfrom(socketFd, (char *) &recOfOtherUser, sizeof(recOfOtherUser), MSG_WAITALL,
-                         (struct sockaddr *) &cliaddr, &len);
-
-            char* ipString = inet_ntoa(cliaddr.sin_addr);
-            printf("current client IP: %s\n ", ipString);
-
-            if(n <= 0 ){ //no client data to process
-                std::cout << "no other user data to process";
-                sleep(2);
-                continue;
-            }else if(ipString == host){
-
-                continue;
-
-            }else{
-
-                std::string ipOfOther = (recOfOtherUser.ipAddr);
-                double latOther = (recOfOtherUser.lat);
-                double lngOther = (recOfOtherUser.lng);
-                unsigned long timestampOther = (recOfOtherUser.lastSeen);
-
-                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
-                std::cout << "client ip " << ipOfOther << std::endl;
-
-                std::thread gpsOtherThread(insertGpsOther, ipOfOther, latOther, lngOther, timestampOther);
-                gpsOtherThread.detach();  //.join();
-                continue;
-
-            }
-
-        } catch (std::exception &err) {
-            std::cerr << "Generic error" << std::endl;
-        }
-    }
-} */
 
 int main()
 {
@@ -270,17 +57,15 @@ int main()
 
                         try {
                             GpsRecord rec;
-                            //rec.ipAddr = payload["userIP"].s(); //req.remote_ip_address;
-                            std::string ip = payload["userIP"].s(); //req.remote_ip_address;
 
+                            std::string ip = payload["userIP"].s();
                             strcpy(rec.ipAddr, ip.c_str());
-                            //rec.ipAddr = ip;
                             rec.lat = payload["lat"].d();
                             rec.lng = payload["long"].d();
                             rec.acc = payload["acc"].d();
                             rec.lastSeen = payload["last_seen"].u();
 
-                            std::thread threadInsertUserData(insertGpsOther, rec.ipAddr, rec.lat, rec.lng, rec.acc, rec.lastSeen);
+                            std::thread threadInsertUserData(insertGps, rec.ipAddr, rec.lat, rec.lng, rec.acc, rec.lastSeen);
                             threadInsertUserData.detach();
 
                             std::thread threadBroadcastSend(broadcasting, rec);
