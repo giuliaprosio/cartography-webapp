@@ -24,4 +24,10 @@ struct GpsRecord {
 };
 
 //BROADCASTING FUNCTION
-void broadcasting(struct GpsRecord); //struct GPSRecord
+void broadcasting(struct GpsRecord);
+
+//OWN IP ADDRESS RESOLVER
+void thisServerIP(char *);
+
+//INCOMING UDP LISTENER
+void listener();
