@@ -34,7 +34,7 @@ find_package(Threads REQUIRED)
 target_link_libraries(asio INTERFACE Threads::Threads)
 
 
-add_executable(webapp main.cpp support_functions.h server_ip_solver.cpp broadcasting_struct.cpp listener_udp.cpp geodata_insert.cpp)
+add_executable(webapp main.cpp support_functions.h server_ip_solver.cpp broadcasting_struct.cpp listener_udp.cpp geodata_insert.cpp multicasting_struct.cpp listener_udp_multicasting.cpp)
 
 target_link_libraries(webapp curl4cpp asio)
 
