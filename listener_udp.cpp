@@ -49,26 +49,19 @@ void listener(){
             char* ipString = inet_ntoa(cliaddr.sin_addr);
             printf("current client IP: %s\n ", ipString);
 
-            if(n <= 0 ){ //no client data to process
+            if(n <= 0 ){
+                //no client data to process
                 std::cout << "no other user data to process";
                 sleep(2);
                 continue;
-            }else if(ipString == host){
 
+            }else if(ipString == host){
+                std::cout << "receiving packet from myself" << std::endl;
                 continue;
 
             }else{
 
-                std::string ipOfOther = (recOfOtherUser.ipAddr);
-                double latOther = (recOfOtherUser.lat);
-                double lngOther = (recOfOtherUser.lng);
-                double accOther = (recOfOtherUser.acc);
-                unsigned long timestampOther = (recOfOtherUser.lastSeen);
-
-                std::cout << "client: " << sizeof(recOfOtherUser) << std::endl;
-                std::cout << "client ip " << ipOfOther << std::endl;
-
-                std::thread gpsOtherThread(insertGps, ipOfOther, latOther, lngOther, accOther, timestampOther);
+                std::thread gpsOtherThread(insertGps, recOfOtherUser);
                 gpsOtherThread.detach();  //.join();
                 continue;
 

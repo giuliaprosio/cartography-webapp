@@ -57,34 +57,19 @@ int main()
 
                         try {
                             GpsRecord rec;
-
                             std::string ip = payload["userIP"].s();
                             strcpy(rec.ipAddr, ip.c_str());
+                            std::cout << "user IP: " << rec.ipAddr << std::endl;
                             rec.lat = payload["lat"].d();
                             rec.lng = payload["long"].d();
                             rec.acc = payload["acc"].d();
                             rec.lastSeen = payload["last_seen"].u();
 
-                            std::thread threadInsertUserData(insertGps, rec.ipAddr, rec.lat, rec.lng, rec.acc, rec.lastSeen);
+                            std::thread threadInsertUserData(insertGps, rec);
                             threadInsertUserData.detach();
 
                             std::thread threadBroadcastSend(broadcasting, rec);
                             threadBroadcastSend.detach();
-
-                            /*while(true){
-                                if(mtx.try_lock()){
-                                    gpsRecords[rec.ipAddr] = rec;
-                                    listOfRecords.push_back(rec);
-                                    std::cout << "my GPS updated" << std::endl;
-
-                                    std::thread threadBroadcastSend(broadcasting, rec);
-                                    threadBroadcastSend.detach();
-                                    mtx.unlock();
-                                    break;
-                                }else{
-                                    sleep(2);
-                                }
-                            } */
 
                         } catch (std::exception &err) {
                             CROW_LOG_INFO << "Error while parsing GPS record";
@@ -99,6 +84,12 @@ int main()
     CROW_ROUTE(app, "/ip")([](const crow::request& req){
         auto &ip = req.remote_ip_address;
         return crow::response{ip};
+    });
+
+    CROW_ROUTE(app, "/serverIP")([](const crow::request& req){
+        char serverIP[256];
+        thisServerIP(serverIP);
+        return crow::response{ serverIP };
     });
 
 
