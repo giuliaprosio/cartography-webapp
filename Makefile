@@ -11,14 +11,14 @@ BUILD_DIRS         = $(patsubst %,build-%,$(TARGETS))
 JOBS              ?= $(shell nproc)
 CMAKE_FLAGS       ?=
 
-.DEFAULT_GOAL      = native
+TARGET            ?= native
 
-all: $(TARGETS);
+all: $(TARGET) frontend;
 
 frontend:
 	$(MAKE) -C $@ $(filter $(FRONTEND_PHONY),$(MAKECMDGOALS))
 
-$(TARGETS): %: build-% frontend
+$(TARGETS): %: build-%
 	cmake --build $< --parallel $(JOBS)
 
 build-native: Makefile CMakeLists.txt

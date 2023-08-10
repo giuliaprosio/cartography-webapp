@@ -4,6 +4,7 @@
 
 - CMake
 - libCURL
+- NodeJs + NPM
 
 Install on Debian and derivatives:
 
@@ -11,15 +12,23 @@ Install on Debian and derivatives:
 
 ## Build
 
-Build for current platform:
-
-    make native
-
-Or simply:
+Build frontend and backend:
 
     make
 
-Build for Greensoft routers:
+Target platform can be set with the `TARGET` variable (default to `native`):
+
+    TARGET=greensoft make
+
+Build only frontend:
+
+    make frontend
+
+Build backend for current platform:
+
+    make native
+
+Build backend for Greensoft routers:
 
     make greensoft
 
