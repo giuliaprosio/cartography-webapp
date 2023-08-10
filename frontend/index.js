@@ -15,7 +15,7 @@ window.onload = async () => {
     window.layer = layerGraph;
 
     parseGraph();
-    setInterval(parseGraph, 10000); //10 seconds
+    setInterval(parseGraph, 30000); //10 seconds
     window.parseGraph = parseGraph;
 
     async function parseGraph() {
