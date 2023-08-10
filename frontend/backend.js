@@ -11,6 +11,17 @@ export async function getGPSLastSeen() {
     return gpsLastSeen;
 }
 
+export async function getGPSRecords() {
+
+    let gpsRecordsJSON = await fetch("/gpsAllRecords", {
+        method: "GET",
+    });
+
+    let gpsLastSeen = JSON.parse(await gpsRecordsJSON.text());
+
+    return gpsRecordsJSON;
+}
+
 export async function getGraph(){
 
     let graphNetwork = await fetch("/graphNetwork", {

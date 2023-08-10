@@ -106,6 +106,25 @@ int main()
         return crow::response(crow::json::wvalue(json));
     });
 
+    CROW_ROUTE(app, "/gpsAllRecords")([](const crow::request& req){
+
+        std::list<GpsRecord>::iterator it;
+        auto json = crow::json::wvalue::object{};
+        int index = 1;
+        for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
+            json[it -> ipAddr] = crow::json::wvalue::object{
+                    {"ip", it -> ipAddr},
+                    {"lat",      it -> lat},
+                    {"lng",      it -> lng},
+                    {"accuracy", it -> acc},
+                    {"ts",       (std::uint64_t) it -> lastSeen}
+            };
+            index ++;
+        }
+
+        return crow::response(crow::json::wvalue(json));
+    });
+
     // router listen thread creation here
     try {
         std::cout << "creating a listener thread";
@@ -114,6 +133,8 @@ int main()
     }catch(std::exception &err){
         std::cout << "Can't create the thread" << std::endl;
     }
+
+
 
     //set the port, set the app to run on multiple threads, and run the app
     app.port(18080).multithreaded().run_async();  //run_async() for asynchronous updates - useful with communication also

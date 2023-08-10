@@ -15,14 +15,17 @@ window.onload = async () => {
     window.layer = layerGraph;
 
     parseGraph();
-    setInterval(parseGraph, 20000); //10 seconds
+    setInterval(parseGraph, 10000); //10 seconds
     window.parseGraph = parseGraph;
 
     async function parseGraph() {
 
+        navigator.geolocation.watchPosition(successCallback, errorCallback);
+
         let gpsLastSeen = await backend.getGPSLastSeen();
         let graph = await backend.getGraph();
         let serverIP = await backend.getServerIPAddress();
+        let gpsAllRecords = await backend.getGPSRecords();
         console.log("gpslastseen: ", gpsLastSeen);
         console.log("graph: ", graph);
         //at this point I have both GPSLastSeen and graphxml
@@ -174,6 +177,7 @@ async function sendCoordinates(ip, lat, lng, acc, ts) {
 }
 
 const successCallback = async (position) => {
+
     let myIP = await backend.getMyIPAddress(); 
 
     console.log("success");
@@ -185,10 +189,7 @@ const successCallback = async (position) => {
     TIMESTAMP = Number(position.timestamp);
 
 
-    let userIP = myIP;
-    //let userIP = "10.0.0.145";
-
-    sendCoordinates(userIP, LATITUDE, LONGITUDE, ACCURACY, TIMESTAMP);
+    await sendCoordinates(myIP, LATITUDE, LONGITUDE, ACCURACY, TIMESTAMP);
 
 
 };
@@ -200,7 +201,7 @@ const errorCallback = (error) => {
 };
 
 
-navigator.geolocation.watchPosition(successCallback, errorCallback, { timeout: 20000 }); //update every 30 seconds
+//navigator.geolocation.watchPosition(successCallback, errorCallback, { timeout: 10000 }); //update every 30 seconds
 
 
 

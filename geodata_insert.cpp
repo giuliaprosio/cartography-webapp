@@ -2,7 +2,7 @@
 
 std::unordered_map<std::string, GpsRecord> gpsRecords = {};
 std::list<GpsRecord> listOfRecords = {};
-std::mutex mtx;
+extern std::mutex mtx;
 
 void insertGps(struct GpsRecord record){
 
