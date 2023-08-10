@@ -25,7 +25,8 @@ struct GpsRecord {
 
 extern std::unordered_map<std::string, GpsRecord> gpsRecords;
 extern std::list<GpsRecord> listOfRecords;
-//extern std::mutex mtx;
+inline std::mutex mtx;
+inline std::mutex mtx_allRecords;
 
 //BROADCASTING FUNCTION
 void broadcasting(struct GpsRecord);
@@ -44,3 +45,6 @@ void multicast_listener();
 
 //GEOLOCATION DATA INSERT IN STRUCT
 void insertGps(struct GpsRecord);
+
+//GEOLOCATION DATA INSERT IN LIST OF ALL RECORDS
+void insertGpsList(struct GpsRecord);

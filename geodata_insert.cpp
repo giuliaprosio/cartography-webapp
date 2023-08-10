@@ -2,20 +2,32 @@
 
 std::unordered_map<std::string, GpsRecord> gpsRecords = {};
 std::list<GpsRecord> listOfRecords = {};
-std::mutex mtx;
+
 
 void insertGps(struct GpsRecord record){
 
     while(true){
         if(mtx.try_lock()){
             gpsRecords[record.ipAddr] = record;
-            listOfRecords.push_back(record);
             mtx.unlock();
-            return;
+            break;
         }else{
             sleep(2);
+            continue;
         }
-        return;
     }
 
+}
+
+void insertGpsList(struct GpsRecord record){
+    while(true){
+        if(mtx_allRecords.try_lock()){
+            listOfRecords.push_back(record);
+            mtx_allRecords.unlock();
+            break;
+        }else{
+            sleep(2);
+            continue;
+        }
+    }
 }

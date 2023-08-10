@@ -55,13 +55,15 @@ void multicast_listener(){
             if(n <= 0 ){
                 //no client data to process
                 std::cout << "no other user data to process";
-                sleep(2);
+                sleep(3);
                 continue;
 
             }else{
 
                 std::thread gpsOtherThread(insertGps, receivedRec);
                 gpsOtherThread.detach();  //.join();
+                std::thread gpsOtherThreadList(insertGpsList, receivedRec);
+                gpsOtherThreadList.detach();
                 continue;
 
             }

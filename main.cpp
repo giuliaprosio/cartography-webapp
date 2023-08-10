@@ -68,6 +68,10 @@ int main()
                             std::thread threadInsertUserData(insertGps, rec);
                             threadInsertUserData.detach();
 
+                            std::thread threadIsertUserDataInList(insertGpsList, rec);
+                            threadIsertUserDataInList.detach();
+
+                            //BROADCASTING VERSION (USE MULTICAST)
                             //std::thread threadBroadcastSend(broadcasting, rec);
                             //threadBroadcastSend.detach();
 
@@ -100,10 +104,19 @@ int main()
 
         auto json = crow::json::wvalue::object{};
 
-        for (auto &[key, val] : gpsRecords) {
-            json[key] = crow::json::wvalue::object{
-                    {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
-            };
+        while(true){
+            if(mtx.try_lock()){
+                for (auto &[key, val] : gpsRecords) {
+                    json[key] = crow::json::wvalue::object{
+                            {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
+                    };
+                }
+                mtx.unlock();
+                break;
+            }else{
+                sleep(2);
+                continue;
+            }
         }
 
         return crow::response(crow::json::wvalue(json));
@@ -114,15 +127,24 @@ int main()
         std::list<GpsRecord>::iterator it;
         auto json = crow::json::wvalue::object{};
         int index = 0;
-        for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
-            json[std::to_string(index)] = crow::json::wvalue::object{
-                    {"ip", it -> ipAddr},
-                    {"lat",      it -> lat},
-                    {"lng",      it -> lng},
-                    {"accuracy", it -> acc},
-                    {"ts",       (std::uint64_t) it -> lastSeen}
-            };
-            index ++;
+        while(true){
+            if(mtx_allRecords.try_lock()){
+                for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
+                    json[std::to_string(index)] = crow::json::wvalue::object{
+                            {"ip", it -> ipAddr},
+                            {"lat",      it -> lat},
+                            {"lng",      it -> lng},
+                            {"accuracy", it -> acc},
+                            {"ts",       (std::uint64_t) it -> lastSeen}
+                    };
+                    index ++;
+                }
+                mtx_allRecords.unlock();
+                break;
+            }else{
+                sleep(2);
+                continue;
+            }
         }
 
         return crow::response(crow::json::wvalue(json));
@@ -130,6 +152,7 @@ int main()
 
     // router listen thread creation here
     try {
+        //BROADCASTING VERSION (USE MULTICAST)
         //std::cout << "creating a listener thread";
         //std::thread threadListener(listener);
         //threadListener.detach();
