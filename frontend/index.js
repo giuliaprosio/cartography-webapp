@@ -53,6 +53,9 @@ window.onload = async () => {
 
             let absNodeType = absNode.type;
             if (absNodeType == 'user') {
+                //find associated router
+                popupContent += '<br>' + "Associated router: " + absNode.associatedRouterName + '<br>' + "Router ip: " + absNode.associateRouterIP;
+
                 let c = ll.drawCircle(absNode.lat, absNode.lng, "#800000", 1.5, 1, 2);  //red
                 let cAcc = ll.drawCircle(absNode.lat, absNode.lng, "red", absNode.acc, 0.5, 0);
 

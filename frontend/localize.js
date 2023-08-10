@@ -31,6 +31,10 @@ export function logicLocalization(gps, graph) {
 
             if (node._attributes.type == 'station') {
                 absNode.type = "user";
+                let associatedRouterId = associatedRouter(node._id, graph.edges);
+                let routerIdx = associatedRouterId.match(/\d+/)[0];
+                absNode.associatedRouterName = graph.nodes[routerIdx]._attributes.hostname.substring(7,13);
+                absNode.associateRouterIP = graph.nodes[routerIdx]._attributes["main-ip-addr"];
                 userNodeIds.push(node._id);
 
                 for (let edge of graph.edges) {
@@ -118,3 +122,14 @@ function isEdgeRouter(routerNode, userNodeIds, graphEdges) {
     }
     return false;
 }
+
+function associatedRouter(userNode, edges){
+    for(let edge of edges){
+        if(userNode == edge._target){
+            return edge._source;
+        }
+    }
+
+    return null;
+}
+
