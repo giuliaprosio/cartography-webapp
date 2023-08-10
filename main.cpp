@@ -57,34 +57,26 @@ int main()
 
                         try {
                             GpsRecord rec;
-
                             std::string ip = payload["userIP"].s();
                             strcpy(rec.ipAddr, ip.c_str());
+                            std::cout << "user IP: " << rec.ipAddr << std::endl;
                             rec.lat = payload["lat"].d();
                             rec.lng = payload["long"].d();
                             rec.acc = payload["acc"].d();
                             rec.lastSeen = payload["last_seen"].u();
 
-                            std::thread threadInsertUserData(insertGps, rec.ipAddr, rec.lat, rec.lng, rec.acc, rec.lastSeen);
+                            std::thread threadInsertUserData(insertGps, rec);
                             threadInsertUserData.detach();
 
-                            std::thread threadBroadcastSend(broadcasting, rec);
-                            threadBroadcastSend.detach();
+                            std::thread threadIsertUserDataInList(insertGpsList, rec);
+                            threadIsertUserDataInList.detach();
 
-                            /*while(true){
-                                if(mtx.try_lock()){
-                                    gpsRecords[rec.ipAddr] = rec;
-                                    listOfRecords.push_back(rec);
-                                    std::cout << "my GPS updated" << std::endl;
+                            //BROADCASTING VERSION (USE MULTICAST)
+                            //std::thread threadBroadcastSend(broadcasting, rec);
+                            //threadBroadcastSend.detach();
 
-                                    std::thread threadBroadcastSend(broadcasting, rec);
-                                    threadBroadcastSend.detach();
-                                    mtx.unlock();
-                                    break;
-                                }else{
-                                    sleep(2);
-                                }
-                            } */
+                            std::thread threadMulticastSend(multicasting, rec);
+                            threadMulticastSend.detach();
 
                         } catch (std::exception &err) {
                             CROW_LOG_INFO << "Error while parsing GPS record";
@@ -101,15 +93,58 @@ int main()
         return crow::response{ip};
     });
 
+    CROW_ROUTE(app, "/serverIP")([](const crow::request& req){
+        char serverIP[256];
+        thisServerIP(serverIP);
+        return crow::response{ serverIP };
+    });
+
 
     CROW_ROUTE(app, "/gpsLastSeen")([](const crow::request& req){
 
         auto json = crow::json::wvalue::object{};
 
-        for (auto &[key, val] : gpsRecords) {
-            json[key] = crow::json::wvalue::object{
-                    {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
-            };
+        while(true){
+            if(mtx.try_lock()){
+                for (auto &[key, val] : gpsRecords) {
+                    json[key] = crow::json::wvalue::object{
+                            {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
+                    };
+                }
+                mtx.unlock();
+                break;
+            }else{
+                sleep(2);
+                continue;
+            }
+        }
+
+        return crow::response(crow::json::wvalue(json));
+    });
+
+    CROW_ROUTE(app, "/gpsAllRecords")([](const crow::request& req){
+
+        std::list<GpsRecord>::iterator it;
+        auto json = crow::json::wvalue::object{};
+        int index = 0;
+        while(true){
+            if(mtx_allRecords.try_lock()){
+                for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
+                    json[std::to_string(index)] = crow::json::wvalue::object{
+                            {"ip", it -> ipAddr},
+                            {"lat",      it -> lat},
+                            {"lng",      it -> lng},
+                            {"accuracy", it -> acc},
+                            {"ts",       (std::uint64_t) it -> lastSeen}
+                    };
+                    index ++;
+                }
+                mtx_allRecords.unlock();
+                break;
+            }else{
+                sleep(2);
+                continue;
+            }
         }
 
         return crow::response(crow::json::wvalue(json));
@@ -117,12 +152,19 @@ int main()
 
     // router listen thread creation here
     try {
-        std::cout << "creating a listener thread";
-        std::thread threadListener(listener);
-        threadListener.detach();
+        //BROADCASTING VERSION (USE MULTICAST)
+        //std::cout << "creating a listener thread";
+        //std::thread threadListener(listener);
+        //threadListener.detach();
+
+        std::cout << "creating multicast listener thread";
+        std::thread multicast_threadListener(multicast_listener);
+        multicast_threadListener.detach();
     }catch(std::exception &err){
         std::cout << "Can't create the thread" << std::endl;
     }
+
+
 
     //set the port, set the app to run on multiple threads, and run the app
     app.port(18080).multithreaded().run_async();  //run_async() for asynchronous updates - useful with communication also

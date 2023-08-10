@@ -11,6 +11,17 @@ export async function getGPSLastSeen() {
     return gpsLastSeen;
 }
 
+export async function getGPSRecords() {
+
+    let gpsRecordsJSON = await fetch("/gpsAllRecords", {
+        method: "GET",
+    });
+
+    let gpsLastSeen = JSON.parse(await gpsRecordsJSON.text());
+
+    return gpsRecordsJSON;
+}
+
 export async function getGraph(){
 
     let graphNetwork = await fetch("/graphNetwork", {
@@ -43,6 +54,14 @@ export async function postGPSLastSeen(payload_coord){
 export async function getMyIPAddress(){
     let res = await fetch("/ip", {
         method: "GET", 
+    });
+
+    return await res.text();
+}
+
+export async function getServerIPAddress(){
+    let res = await fetch("/serverIP", {
+        method: "GET",
     });
 
     return await res.text();
