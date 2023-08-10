@@ -35,3 +35,45 @@ Build backend for Greensoft routers:
 If the Greensoft toolchain is compiled in another directory than `./greensoft-sdk` the `GREENSOFT_SDK_DIR` variable (or any other variable of the Makefile) can be overriden like so:
 
     make greensoft GREENSOFT_SDK_DIR=../greensoft
+
+This way in the folder 'out' with the executable file will be generated.
+
+Execute inside the /frontend folder of the application the command
+
+```bash
+npm run build:dev
+```
+
+To generate the 'static' folder associated with the executable
+
+## Upload in the router
+
+First create in the router a writable folder to put the application in.
+
+```bash
+ssh -X default@IP
+cd /var/persistent-data
+sudo mkdir cartographyApp
+sudo chown -R default:www-data /var/persistent-data/cartographyApp
+```
+
+Then copy the folder containing the executable and the static files in the router
+
+```bash
+scp -r ./out default@IP:/var/persistent-data/cartographyApp
+```
+
+## Start and kill
+To make the application start, ssh in the router, change directory to out and execute the command
+```bash
+./webapp &
+```
+
+To kill the application, find process-id with command ps and execute
+```bash
+kill [process-id]
+```
+
+## Use 
+
+
