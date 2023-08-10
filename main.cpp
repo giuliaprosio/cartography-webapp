@@ -130,9 +130,13 @@ int main()
 
     // router listen thread creation here
     try {
-        std::cout << "creating a listener thread";
-        std::thread threadListener(listener);
-        threadListener.detach();
+        //std::cout << "creating a listener thread";
+        //std::thread threadListener(listener);
+        //threadListener.detach();
+
+        std::cout << "creating multicast listener thread";
+        std::thread multicast_threadListener(multicast_listener);
+        multicast_threadListener.detach();
     }catch(std::exception &err){
         std::cout << "Can't create the thread" << std::endl;
     }

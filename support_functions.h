@@ -39,5 +39,8 @@ void thisServerIP(char *);
 //INCOMING UDP LISTENER
 void listener();
 
+//INCOMING UDP MULTICAST LISTENER
+void multicast_listener();
+
 //GEOLOCATION DATA INSERT IN STRUCT
 void insertGps(struct GpsRecord);
