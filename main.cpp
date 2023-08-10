@@ -68,8 +68,11 @@ int main()
                             std::thread threadInsertUserData(insertGps, rec);
                             threadInsertUserData.detach();
 
-                            std::thread threadBroadcastSend(broadcasting, rec);
-                            threadBroadcastSend.detach();
+                            //std::thread threadBroadcastSend(broadcasting, rec);
+                            //threadBroadcastSend.detach();
+
+                            std::thread threadMulticastSend(multicasting, rec);
+                            threadMulticastSend.detach();
 
                         } catch (std::exception &err) {
                             CROW_LOG_INFO << "Error while parsing GPS record";
@@ -110,9 +113,9 @@ int main()
 
         std::list<GpsRecord>::iterator it;
         auto json = crow::json::wvalue::object{};
-        int index = 1;
+        int index = 0;
         for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
-            json[it -> ipAddr] = crow::json::wvalue::object{
+            json[std::to_string(index)] = crow::json::wvalue::object{
                     {"ip", it -> ipAddr},
                     {"lat",      it -> lat},
                     {"lng",      it -> lng},

@@ -30,6 +30,9 @@ extern std::list<GpsRecord> listOfRecords;
 //BROADCASTING FUNCTION
 void broadcasting(struct GpsRecord);
 
+//MULTICASTING
+void multicasting(struct GpsRecord);
+
 //OWN IP ADDRESS RESOLVER
 void thisServerIP(char *);
 
