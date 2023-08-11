@@ -63,7 +63,10 @@ int main()
                             rec.lat = payload["lat"].d();
                             rec.lng = payload["long"].d();
                             rec.acc = payload["acc"].d();
-                            rec.lastSeen = payload["last_seen"].u();
+                            std::string last_seen = payload["last_seen"].s();
+                            strcpy(rec.lastSeen, last_seen.c_str());
+
+                            std::cout << "TIMESTAMP TO SEND: " << rec.lastSeen << std::endl;
 
                             std::thread threadInsertUserData(insertGps, rec);
                             threadInsertUserData.detach();

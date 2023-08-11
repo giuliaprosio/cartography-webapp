@@ -5,7 +5,7 @@ import * as loc from "./localize";
 let LATITUDE = 0.0;
 let LONGITUDE = 0.0;
 let ACCURACY = 0.0;
-let TIMESTAMP = 0.0;
+let TIMESTAMP = 0;
 
 
 window.onload = async () => {
@@ -169,9 +169,12 @@ async function sendCoordinates(ip, lat, lng, acc, ts) {
     json_coord.lat = lat; //position.coords.latitude;
     json_coord.long = lng; //position.coords.longitude;
     json_coord.acc = acc; //position.coords.accuracy;
-    json_coord.last_seen = ts; //position.timestamp;
+    json_coord.last_seen = ts.toString(); //position.timestamp;
 
-    //this same thing also done when router dropped (line 178)
+    console.log("json to string: ", json_coord.last_seen)
+
+
+
     let payload_coord = JSON.stringify(json_coord);
     let statusCode = backend.postGPSLastSeen(payload_coord);
 
@@ -188,8 +191,9 @@ const successCallback = async (position) => {
 
     LATITUDE = Number(position.coords.latitude);
     LONGITUDE = Number(position.coords.longitude);
-    ACCURACY = Number(position.coords.accuracy<= 50 ? position.coords.accuracy : 50.0); //
+    ACCURACY = Number(position.coords.accuracy); //<= 50 ? position.coords.accuracy : 50.0
     TIMESTAMP = Number(position.timestamp);
+    //console.log("SENDING TIMESTAMP: ", TIMESTAMP);
 
 
     await sendCoordinates(myIP, LATITUDE, LONGITUDE, ACCURACY, TIMESTAMP);

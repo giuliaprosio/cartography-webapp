@@ -20,7 +20,7 @@ struct GpsRecord {
     double lat;
     double lng;
     double acc;
-    unsigned long lastSeen;
+    char lastSeen[256];
 };
 
 extern std::unordered_map<std::string, GpsRecord> gpsRecords;
