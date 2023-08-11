@@ -77,7 +77,9 @@ kill [process-id]
 ## Use 
 ### Share location permission
 Use the app on Chrome browser.
-Allow giving your location in [chrome-devtools](chrome://flags/#unsafely-treat-insecure-origin-as-secure).
+Allow giving your location possible in:
+* **Chrome**, in chrome://flags/#unsafely-treat-insecure-origin-as-secure.
+* **FireFox**, in devtools.serviceWorkers.testing.enabled setting in about:config
 
 Enable application site: http:// ene5ai-yoi-0#.gnyoi.com:18080,
 (# = router number).
