@@ -1,35 +1,5 @@
 # Cartography
 
-## Additional configuration of the toolchain
-In the **greensoft-sdk** folder execute:
-```bash
-make menuconfig
-```
-A prompt window should pop-up.
-
-In Menu Target packages ----> Libraries ----> Networking
-Select:
-* Libcurl
-
-This will allocate the folder for the libcurl package.
-Then always in the same folder execute:
-```bash
-make libcurl-rebuild
-```
-
-Now the package will be correctly added in the toolchain.
-
-The installed version is too old for the application, so search inside the folder for the
-file **libcurl.mk** and change at the top
-"LIBCURL_VERSION" to 8.1.2 
-Note: you will need internet connection
-for that.
-
-Finally in the file **libcurl.hash** add the following line:
-
-"sha256  31b1118eb8bfd43cd95d9a3f146f814ff874f6ed3999b29d94f4d1e7dbac5ef6  curl-8.1.2.tar.xz "
-
-
 ## Dependencies
 
 - CMake
@@ -105,5 +75,13 @@ kill [process-id]
 ```
 
 ## Use 
+### Share location permission
+Use the app on Chrome browser.
+Allow giving your location in [chrome-devtools](chrome://flags/#unsafely-treat-insecure-origin-as-secure).
+
+Enable application site: http:// ene5ai-yoi-0#.gnyoi.com:18080,
+(# = router number).
+
+
 
 
