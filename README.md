@@ -69,6 +69,10 @@ To make the application start, ssh in the router, change directory to out and ex
 ./webapp &
 ```
 
+The following environment variables can be set to customize its behavior:
+
+- `BROADCAST_INTERFACE`: The name of the interface to use for broadcasting the informations. (defaults to `wlp3s0`)
+
 To kill the application, find process-id with command ps and execute
 ```bash
 kill [process-id]
