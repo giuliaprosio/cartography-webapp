@@ -6,7 +6,11 @@ std::list<GpsRecord> listOfRecords = {};
 
 void insertGps(struct GpsRecord record){
 
-    while(true){
+    mtx.lock();
+    gpsRecords[record.ipAddr] = record;
+    mtx.unlock();
+
+    /*while(true){
         if(mtx.try_lock()){
             gpsRecords[record.ipAddr] = record;
             mtx.unlock();
@@ -15,12 +19,17 @@ void insertGps(struct GpsRecord record){
             sleep(2);
             continue;
         }
-    }
+    }*/
 
 }
 
 void insertGpsList(struct GpsRecord record){
-    while(true){
+
+    mtx_allRecords.lock();
+    listOfRecords.push_back(record);
+    mtx_allRecords.unlock();
+
+    /*while(true){
         if(mtx_allRecords.try_lock()){
             listOfRecords.push_back(record);
             mtx_allRecords.unlock();
@@ -29,5 +38,5 @@ void insertGpsList(struct GpsRecord record){
             sleep(2);
             continue;
         }
-    }
+    } */
 }

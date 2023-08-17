@@ -107,7 +107,16 @@ int main()
 
         auto json = crow::json::wvalue::object{};
 
-        while(true){
+        mtx.lock();
+        for (auto &[key, val] : gpsRecords) {
+            json[key] = crow::json::wvalue::object{
+                    {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
+            };
+        }
+        mtx.unlock();
+
+
+        /*while(true){
             if(mtx.try_lock()){
                 for (auto &[key, val] : gpsRecords) {
                     json[key] = crow::json::wvalue::object{
@@ -120,7 +129,7 @@ int main()
                 sleep(2);
                 continue;
             }
-        }
+        } */
 
         return crow::response(crow::json::wvalue(json));
     });
@@ -130,7 +139,21 @@ int main()
         std::list<GpsRecord>::iterator it;
         auto json = crow::json::wvalue::object{};
         int index = 0;
-        while(true){
+
+        mtx_allRecords.lock();
+        for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
+            json[std::to_string(index)] = crow::json::wvalue::object{
+                    {"ip", it -> ipAddr},
+                    {"lat",      it -> lat},
+                    {"lng",      it -> lng},
+                    {"accuracy", it -> acc},
+                    {"ts",       (std::uint64_t) it -> lastSeen}
+            };
+            index ++;
+        }
+        mtx_allRecords.unlock();
+
+        /*while(true){
             if(mtx_allRecords.try_lock()){
                 for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
                     json[std::to_string(index)] = crow::json::wvalue::object{
@@ -148,7 +171,7 @@ int main()
                 sleep(2);
                 continue;
             }
-        }
+        } */
 
         return crow::response(crow::json::wvalue(json));
     });
