@@ -1,11 +1,14 @@
 import * as backend from "./backend";
 import * as ll from "./leafletLayers";
 import * as loc from "./localize";
+import {splitWords} from "leaflet/src/core/Util";
 
 let LATITUDE = 0.0;
 let LONGITUDE = 0.0;
 let ACCURACY = 0.0;
 let TIMESTAMP = 0;
+
+let listGraph = [];
 
 
 window.onload = async () => {
@@ -30,6 +33,8 @@ window.onload = async () => {
         console.log("graph: ", graph);
         //at this point I have both GPSLastSeen and graphxml
 
+        //
+
         //when timer finishes redoes everything
         //initialization to redo
         layerGraph.clearLayers();
@@ -41,6 +46,11 @@ window.onload = async () => {
         /**NODES */
         let [absGraph, dropRouter] = loc.logicLocalization(gpsLastSeen, graph);
         console.log("to drop: ", dropRouter);
+
+        listGraph.push(Object.assign({}, absGraph));
+        console.log("listgraph ", listGraph);
+
+
 
         //--------------------------
 
