@@ -5,8 +5,8 @@
 
 void multicasting(struct GpsRecord rec) {
 
-    struct in_addr localInterface;
-    struct sockaddr_in groupSock;
+    struct in_addr localInterface{};
+    struct sockaddr_in groupSock{};
     int fd;
 
     //create a datagram socket on which to send
@@ -16,17 +16,17 @@ void multicasting(struct GpsRecord rec) {
         return;
     }
 
-    //initialize the group sockaddr structure  with group address GROUP and port number PORT
+    //initialize the group sock addr structure  with group address GROUP and port number PORT
     memset((char *) &groupSock, 0, sizeof(groupSock));
     groupSock.sin_family = AF_INET;
     groupSock.sin_addr.s_addr = inet_addr("239.135.197.111");
     groupSock.sin_port = htons(5550);
 
-    //NO LOOPBACK
+    //NO LOOP BACK
     {
         char loopch=0;
         if(setsockopt(fd, IPPROTO_IP, IP_MULTICAST_LOOP, (char *)&loopch, sizeof(loopch)) < 0){
-            perror("error in setting no loopback option");
+            perror("error in setting no loop back option");
             close(fd);
             exit(1);
         }
@@ -34,7 +34,7 @@ void multicasting(struct GpsRecord rec) {
 
     //TTL 1
     {
-        u_char ttl=1;
+        u_char ttl=5;
         if(setsockopt(fd, IPPROTO_IP, IP_MULTICAST_TTL, (char *)&ttl, sizeof(ttl)) < 0){
             perror("error in setting ttl option");
             close(fd);

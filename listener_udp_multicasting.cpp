@@ -1,8 +1,8 @@
 #include "support_functions.h"
 
 void multicast_listener(){
-    struct sockaddr_in localSock;
-    struct ip_mreq group;
+    struct sockaddr_in localSock{};
+    struct ip_mreq group{};
     int fd;
 
     //create a datagram socket on which to receive
@@ -11,7 +11,7 @@ void multicast_listener(){
         return;
     }
 
-    //enable SO_REUSEADDRESS to allow multiple instances of this application
+    //enable SO_REUSE ADDRESS to allow multiple instances of this application
     //to receive copies of multicast datagrams
     {
         int reuse = 1;
@@ -48,7 +48,7 @@ void multicast_listener(){
     while(true){
         try{
             std::cout << "ready to receive" << std::endl;
-            GpsRecord receivedRec;
+            GpsRecord receivedRec{};
 
             int n;
             n = recvfrom(fd, (char *) &receivedRec, sizeof(receivedRec), MSG_WAITALL, NULL, NULL);

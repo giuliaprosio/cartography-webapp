@@ -27,9 +27,9 @@ export function logicLocalization(gps, graph) {
             absNode.lat = gps[nodeIP].lat;
             absNode.lng = gps[nodeIP].lng;
             absNode.acc = gps[nodeIP].accuracy;
-            absNode.ts = gps[nodeIP].ts;
+            absNode.ts = gps[nodeIP].ts.toString();
 
-            if (node._attributes.type == 'station') {
+            if (node._attributes.type === 'station') {
                 absNode.type = "user";
                 let associatedRouterId = associatedRouter(node._id, graph.edges);
                 let routerIdx = associatedRouterId.match(/\d+/)[0];
@@ -38,7 +38,7 @@ export function logicLocalization(gps, graph) {
                 userNodeIds.push(node._id);
 
                 for (let edge of graph.edges) {
-                    if (edge._target == node._id) {
+                    if (edge._target === node._id) {
                         mapOfIdx[edge._source] = absGraph.nodes.length;
                     }
                 }
@@ -79,7 +79,7 @@ export function logicLocalization(gps, graph) {
     for (let edge of graph.edges) {
 
         let absEdge = {};
-        if (mapOfIdx[edge._source] != undefined && mapOfIdx[edge._target] != undefined) {
+        if (mapOfIdx[edge._source] !== undefined && mapOfIdx[edge._target] !== undefined) {
 
             absEdge.source = mapOfIdx[edge._source];
             absEdge.dest = mapOfIdx[edge._target];
@@ -88,11 +88,11 @@ export function logicLocalization(gps, graph) {
 
             for (let p = 0; p < absGraph.nodes.length; p++) {
                 let nodeForCoord = absGraph.nodes[p];
-                if (absEdge.source == p) {
+                if (absEdge.source === p) {
                     absEdge.sourceLat = nodeForCoord.lat;
                     absEdge.sourceLng = nodeForCoord.lng;
 
-                } else if (absEdge.dest == p) {
+                } else if (absEdge.dest === p) {
                     absEdge.destLat = nodeForCoord.lat;
                     absEdge.destLng = nodeForCoord.lng;
                 }
@@ -115,7 +115,7 @@ export function logicLocalization(gps, graph) {
 function isEdgeRouter(routerNode, userNodeIds, graphEdges) {
     for (let userNodeId of userNodeIds) {
         for (let edge of graphEdges) {
-            if (routerNode._id == edge._source & userNodeId == edge._target) {
+            if (routerNode._id === edge._source & userNodeId === edge._target) {
                 return true;
             }
         }
@@ -125,7 +125,7 @@ function isEdgeRouter(routerNode, userNodeIds, graphEdges) {
 
 function associatedRouter(userNode, edges){
     for(let edge of edges){
-        if(userNode == edge._target){
+        if(userNode === edge._target){
             return edge._source;
         }
     }

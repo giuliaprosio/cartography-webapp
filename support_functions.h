@@ -11,7 +11,6 @@
 #include <list>
 #include <ifaddrs.h>
 
-
 //struct GPS
 struct GpsRecord {
 
