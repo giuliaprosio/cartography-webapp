@@ -56,7 +56,7 @@ int main()
                             return crow::response(400);
 
                         try {
-                            GpsRecord rec;
+                            GpsRecord rec{};
                             std::string ip = payload["userIP"].s();
                             strcpy(rec.ipAddr, ip.c_str());
                             std::cout << "user IP: " << rec.ipAddr << std::endl;
@@ -110,26 +110,10 @@ int main()
         mtx.lock();
         for (auto &[key, val] : gpsRecords) {
             json[key] = crow::json::wvalue::object{
-                    {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
+                    {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", val.lastSeen}
             };
         }
         mtx.unlock();
-
-
-        /*while(true){
-            if(mtx.try_lock()){
-                for (auto &[key, val] : gpsRecords) {
-                    json[key] = crow::json::wvalue::object{
-                            {"lat", val.lat}, {"lng", val.lng}, {"accuracy", val.acc}, {"ts", (std::uint64_t) val.lastSeen}
-                    };
-                }
-                mtx.unlock();
-                break;
-            }else{
-                sleep(2);
-                continue;
-            }
-        } */
 
         return crow::response(crow::json::wvalue(json));
     });
@@ -147,31 +131,11 @@ int main()
                     {"lat",      it -> lat},
                     {"lng",      it -> lng},
                     {"accuracy", it -> acc},
-                    {"ts",       (std::uint64_t) it -> lastSeen}
+                    {"ts",       it -> lastSeen}
             };
             index ++;
         }
         mtx_allRecords.unlock();
-
-        /*while(true){
-            if(mtx_allRecords.try_lock()){
-                for(it = listOfRecords.begin(); it != listOfRecords.end(); ++it){
-                    json[std::to_string(index)] = crow::json::wvalue::object{
-                            {"ip", it -> ipAddr},
-                            {"lat",      it -> lat},
-                            {"lng",      it -> lng},
-                            {"accuracy", it -> acc},
-                            {"ts",       (std::uint64_t) it -> lastSeen}
-                    };
-                    index ++;
-                }
-                mtx_allRecords.unlock();
-                break;
-            }else{
-                sleep(2);
-                continue;
-            }
-        } */
 
         return crow::response(crow::json::wvalue(json));
     });
