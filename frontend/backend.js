@@ -17,9 +17,9 @@ export async function getGPSRecords() {
         method: "GET",
     });
 
-    let gpsLastSeen = JSON.parse(await gpsRecordsJSON.text());
+    let gpsLastSeenRecord = JSON.parse(await gpsRecordsJSON.text());
 
-    return gpsRecordsJSON;
+    return gpsLastSeenRecord;
 }
 
 export async function getGraph(){
