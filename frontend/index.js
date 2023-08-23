@@ -50,6 +50,8 @@ window.onload = async () => {
         listGraph.push(Object.assign({}, absGraph));
         console.log("listgraph ", listGraph);
 
+        localStorage.setItem('list', JSON.stringify(listGraph));
+
 
 
         //--------------------------
@@ -62,7 +64,7 @@ window.onload = async () => {
             let popupContent = 'Name: ' + absNodeName + '<br>' + 'ip: ' + absNodeIP + '<br>';
 
             let absNodeType = absNode.type;
-            if (absNodeType == 'user') {
+            if (absNodeType === 'user') {
                 //find associated router
                 popupContent += '<br>' + "Associated router: " + absNode.associatedRouterName + '<br>' + "Router ip: " + absNode.associateRouterIP;
 
@@ -141,7 +143,7 @@ window.onload = async () => {
             }
 
             let otherEdge = alreadySeen[key];
-            if (otherEdge == undefined) {
+            if (otherEdge === undefined) {
                 alreadySeen[key] = edge;
                 continue;
             }
@@ -202,8 +204,8 @@ const successCallback = async (position) => {
     LATITUDE = Number(position.coords.latitude);
     LONGITUDE = Number(position.coords.longitude);
     ACCURACY = Number(position.coords.accuracy); //<= 50 ? position.coords.accuracy : 50.0
-    TIMESTAMP = Number(position.timestamp);
-    //console.log("SENDING TIMESTAMP: ", TIMESTAMP);
+    TIMESTAMP = (position.timestamp).toString();
+    console.log("SENDING TIMESTAMP: ", TIMESTAMP);
 
 
     await sendCoordinates(myIP, LATITUDE, LONGITUDE, ACCURACY, TIMESTAMP);
