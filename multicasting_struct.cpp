@@ -1,7 +1,5 @@
+#include "utils.h"
 #include "support_functions.h"
-
-#define GROUP "239.135.197.111"
-#define PORT 5550
 
 void multicasting(struct GpsRecord rec) {
 
@@ -20,7 +18,7 @@ void multicasting(struct GpsRecord rec) {
     memset((char *) &groupSock, 0, sizeof(groupSock));
     groupSock.sin_family = AF_INET;
     groupSock.sin_addr.s_addr = inet_addr("239.135.197.111");
-    groupSock.sin_port = htons(5550);
+    groupSock.sin_port = htons(getenvi("OUT_PORT", 5550));
 
     //NO LOOPBACK
     {
