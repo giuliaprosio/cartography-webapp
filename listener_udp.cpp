@@ -1,4 +1,7 @@
 #include "support_functions.h"
+#include <cstring>
+#include <iostream>
+#include <thread>
 #include <unistd.h>
 #include <netdb.h>
 #include <arpa/inet.h>

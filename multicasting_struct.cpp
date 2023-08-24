@@ -1,5 +1,7 @@
 #include "utils.h"
 #include "support_functions.h"
+#include <cstring>
+#include <iostream>
 #include <arpa/inet.h>
 #include <unistd.h>
 

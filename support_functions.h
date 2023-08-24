@@ -1,14 +1,7 @@
-#include <sstream>
-#include <iostream>
 #include <unordered_map>
 #include <string>
-#include <cstring>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <thread>
 #include <mutex>
 #include <list>
-#include <ifaddrs.h>
 
 //struct GPS
 struct GpsRecord {
