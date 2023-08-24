@@ -23,11 +23,13 @@ $(SUBDIRS):
 $(TARGETS): %: build-%
 	cmake --build $< --parallel $(JOBS)
 
+build-native: BUILD_TYPE ?= Debug
 build-native: Makefile CMakeLists.txt
-	cmake -S . -B $@ $(CMAKE_FLAGS)
+	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(CMAKE_FLAGS)
 
+build-greensoft: BUILD_TYPE ?= Release
 build-greensoft: Makefile CMakeLists.txt $(GREENSOFT_CC)
-	cmake -S . -B $@ $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
+	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
 $(GREENSOFT_CC): $(GREENSOFT_SDK_DIR)
 	make -C $< toolchain
