@@ -1,4 +1,7 @@
 #include "support_functions.h"
+#include <unistd.h>
+#include <netdb.h>
+#include <arpa/inet.h>
 
 //LISTENER FUNCTION FOR INCOMING UDP
 

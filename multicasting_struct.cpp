@@ -1,5 +1,7 @@
 #include "utils.h"
 #include "support_functions.h"
+#include <arpa/inet.h>
+#include <unistd.h>
 
 void multicasting(struct GpsRecord rec) {
 

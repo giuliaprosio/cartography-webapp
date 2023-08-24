@@ -1,5 +1,6 @@
 #include "utils.h"
 #include "support_functions.h"
+#include <netdb.h>
 
 //SERVER IP RESOLVER
 

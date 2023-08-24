@@ -1,4 +1,6 @@
 #include "support_functions.h"
+#include <unistd.h>
+#include <arpa/inet.h>
 
 //BROADCASTING FUNCTION
 void broadcasting(struct GpsRecord rec){ //
