@@ -28,7 +28,7 @@ int main()
     CROW_ROUTE(app, "/graphNetwork")([](const crow::request& req){
                         curl4::CURL4 init = curl4::easy::init();
 
-                        std::string url = "https://localhost:443/admin/netgraph";
+                        std::string url = getenvs("NETGRAPH_URL", "https://localhost:443/admin/netgraph");
 
                         std::string xml;
                         struct curl_slist *headers = nullptr;
