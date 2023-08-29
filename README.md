@@ -89,6 +89,20 @@ To kill the application, find process-id with command ps and execute
 kill [process-id]
 ```
 
+## Run local simulation for debug purposes
+
+This will run two processes locally in a way so that they can exchange messages with each other.
+The network topology Graphml is generated from the `debug/network.dot` to make it easier to edit.
+
+To generate the Graphml you will need the following dependencies:
+
+    sudo apt install graphviz python3-networkx
+
+Then you can use this command tu run the debug simulation:
+
+    make debug
+
+
 ## Use 
 ### Share location permission
 Use the app on Chrome browser.

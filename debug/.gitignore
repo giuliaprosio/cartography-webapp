@@ -1,0 +1,4 @@
+*.gml
+*.xml
+*.dot
+!*.def.dot

@@ -18,6 +18,10 @@ all: $(TARGET) frontend;
 frontend:
 	$(MAKE) -C $@ $(filter $(FRONTEND_PHONY),$(MAKECMDGOALS))
 
+debug: native frontend
+	$(MAKE) -C debug
+	./debug.sh
+
 $(TARGETS): %: build-%
 	cmake --build $< --parallel $(JOBS)
 
