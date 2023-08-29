@@ -1,3 +1,5 @@
+include .phony.mk
+
 all: network.xml;
 
 %.xml: %.gml
@@ -8,3 +10,11 @@ all: network.xml;
 
 network.dot:
 	cp network.def.dot $@
+
+cleanall: clean
+	rm -f network.dot
+
+clean:
+	rm -f network.xml network.gml
+
+.PHONY: $(debug_PHONY)

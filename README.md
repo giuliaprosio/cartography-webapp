@@ -100,7 +100,7 @@ To generate the Graphml you will need the following dependencies:
 
 Then you can use this command tu run the debug simulation:
 
-    make debug
+    ./debug.sh
 
 
 ## Use 

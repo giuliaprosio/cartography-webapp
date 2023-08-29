@@ -1,5 +1,7 @@
 #!/bin/sh
 
+make native frontend debug
+
 export NETGRAPH_URL="file://$(realpath debug/network.xml)"
 export BROADCAST_INTERFACE=lo
 
