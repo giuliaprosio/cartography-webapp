@@ -26,4 +26,4 @@ clean: cleanbuild;
 cleanbuild:
 	rm -rf ../out/static
 
-.PHONY: $(FRONTEND_PHONY)
+.PHONY: $(frontend_PHONY)

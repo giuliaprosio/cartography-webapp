@@ -1,0 +1,22 @@
+digraph {
+  router1 [
+    type = backhaul
+    hostname = "ene5ai-yoi-01.gnyoi.com"
+    main_ip_addr = "10.0.0.1"
+  ]
+  router2 [
+    type = backhaul
+    hostname = "ene5ai-yoi-02.gnyoi.com"
+    main_ip_addr = "10.0.0.2"
+  ]
+  router1 -> router2
+  router2 -> router1
+
+  device1 [
+    type = station
+    hostname = "Local Host"
+    main_ip_addr ="127.0.0.1"
+    mac_addr ="d4:54:8b:55:bc:fc"
+  ]
+  router1 -> device1
+}
