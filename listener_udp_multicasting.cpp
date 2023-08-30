@@ -1,3 +1,4 @@
+#include "utils.h"
 #include "support_functions.h"
 
 void multicast_listener(){
@@ -25,7 +26,7 @@ void multicast_listener(){
 
     localSock.sin_family = AF_INET;
     localSock.sin_addr.s_addr = INADDR_ANY;
-    localSock.sin_port = htons(5550);
+    localSock.sin_port = htons(getenvi("IN_PORT", 5550));
 
     //binding server side
     if (bind(fd, (const struct sockaddr *) &localSock, sizeof(localSock)) < 0) {

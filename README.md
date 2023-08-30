@@ -69,6 +69,21 @@ To make the application start, ssh in the router, change directory to out and ex
 ./webapp &
 ```
 
+The following environment variables can be set to customize its behavior:
+
+- `BROADCAST_INTERFACE`: The name of the interface to use for broadcasting the informations. (defaults to `wlp3s0`)
+- `APP_PORT`: The port to use for serving the web app. (defaults to `18080`)
+- `IN_PORT`: The port to use when listening over UDP. (defaults to `5550`)
+- `OUT_PORT`: The port to use when sending data over UDP. (defaults to `5550`)
+- `NETGRAPH_URL`: The url to the network graphml. (defaults to `"https://localhost:443/admin/netgraph"`)
+
+It can be useful for running multiple server, for local testing purposes:
+
+```bash
+BROADCAST_INTERFACE=lo APP_PORT=18080 IN_PORT=7777 NETGRAPH_URL="file://$(realpath ../network/netgraph.xml)" ./webapp &
+BROADCAST_INTERFACE=lo APP_PORT=18081 OUT_PORT=7777 ./webapp &
+```
+
 To kill the application, find process-id with command ps and execute
 ```bash
 kill [process-id]

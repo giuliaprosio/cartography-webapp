@@ -1,3 +1,4 @@
+#include "utils.h"
 #include "support_functions.h"
 
 //SERVER IP RESOLVER
@@ -13,6 +14,7 @@ void thisServerIP(char * host){
         exit(EXIT_FAILURE);
     }
 
+    char *name = getenvs("BROADCAST_INTERFACE", "wlp3s0");
 
     for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next)
     {
@@ -21,7 +23,7 @@ void thisServerIP(char * host){
 
         s=getnameinfo(ifa->ifa_addr,sizeof(struct sockaddr_in),tmp, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
 
-        if((strcmp(ifa->ifa_name,"wlp3s0")==0)&&(ifa->ifa_addr->sa_family==AF_INET))
+        if((strcmp(ifa->ifa_name,name)==0)&&(ifa->ifa_addr->sa_family==AF_INET))
         {
             if (s != 0)
             {

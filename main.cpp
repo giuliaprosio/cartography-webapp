@@ -7,6 +7,7 @@
 #include <thread>
 #include <list>
 #include "curl4.hpp"
+#include "utils.h"
 #include "support_functions.h"
 
 
@@ -27,7 +28,7 @@ int main()
     CROW_ROUTE(app, "/graphNetwork")([](const crow::request& req){
                         curl4::CURL4 init = curl4::easy::init();
 
-                        std::string url = "https://localhost:443/admin/netgraph";
+                        std::string url = getenvs("NETGRAPH_URL", "https://localhost:443/admin/netgraph");
 
                         std::string xml;
                         struct curl_slist *headers = nullptr;
@@ -157,7 +158,8 @@ int main()
 
 
     //set the port, set the app to run on multiple threads, and run the app
-    app.port(18080).multithreaded().run_async();  //run_async() for asynchronous updates - useful with communication also
+    int port = getenvi("APP_PORT", 18080);
+    app.port(port).multithreaded().run_async();  //run_async() for asynchronous updates - useful with communication also
                                                         // on socket
 
 }
