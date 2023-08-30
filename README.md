@@ -66,7 +66,7 @@ scp -r ./out default@IP:/var/persistent-data/cartographyApp
 ## Start and kill
 To make the application start, ssh in the router, change directory to out and execute the command
 ```bash
-./webapp &
+AUTH_BASIC="$(printf 'user:password' | base64)" ./webapp &
 ```
 
 The following environment variables can be set to customize its behavior:
