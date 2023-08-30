@@ -76,12 +76,13 @@ The following environment variables can be set to customize its behavior:
 - `IN_PORT`: The port to use when listening over UDP. (defaults to `5550`)
 - `OUT_PORT`: The port to use when sending data over UDP. (defaults to `5550`)
 - `NETGRAPH_URL`: The url to the network graphml. (defaults to `"https://localhost:443/admin/netgraph"`)
+- `AUTH_BASIC`: The base64 encoded credentials to use for the `NETGRAPH_URL` request. (defaults to `""`)
 
 It can be useful for running multiple server, for local testing purposes:
 
 ```bash
 BROADCAST_INTERFACE=lo APP_PORT=18080 IN_PORT=7777 NETGRAPH_URL="file://$(realpath ../network/netgraph.xml)" ./webapp &
-BROADCAST_INTERFACE=lo APP_PORT=18081 OUT_PORT=7777 ./webapp &
+BROADCAST_INTERFACE=lo APP_PORT=18081 OUT_PORT=7777 AUTH_BASIC="$(printf 'user:password' | base64)" ./webapp &
 ```
 
 To kill the application, find process-id with command ps and execute

@@ -29,10 +29,12 @@ int main()
                         curl4::CURL4 init = curl4::easy::init();
 
                         std::string url = getenvs("NETGRAPH_URL", "https://localhost:443/admin/netgraph");
+                        std::string credentials = getenvs("AUTH_BASIC", "");
+                        std::string auth_header = "Authorization: Basic " + credentials;
 
                         std::string xml;
                         struct curl_slist *headers = nullptr;
-                        headers = curl_slist_append(headers, "Authorization: Basic YWRtaW46YjRtZXNocm9vdA==");
+                        headers = curl_slist_append(headers, auth_header.c_str());
                         init.setopt(CURLOPT_URL, url);
                         init.setopt(CURLOPT_SSL_VERIFYPEER, 0);
                         init.setopt(CURLOPT_SSL_VERIFYHOST, 0);
