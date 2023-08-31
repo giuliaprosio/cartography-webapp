@@ -1,8 +1,9 @@
+#include "multicasting_struct.h"
+#include "server_ip_solver.h"
 #include "utils.h"
-#include "support_functions.h"
+#include <arpa/inet.h>
 #include <cstring>
 #include <iostream>
-#include <arpa/inet.h>
 #include <unistd.h>
 
 void multicasting(struct GpsRecord rec) {

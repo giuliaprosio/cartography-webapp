@@ -1,5 +1,7 @@
+#include "server_ip_solver.h"
 #include "utils.h"
-#include "support_functions.h"
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <ifaddrs.h>
 #include <netdb.h>

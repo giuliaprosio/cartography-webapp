@@ -1,10 +1,12 @@
-#include "support_functions.h"
+#include "geodata_insert.h"
+#include "server_ip_solver.h"
+#include "structs.h"
+#include <arpa/inet.h>
 #include <cstring>
 #include <iostream>
+#include <netdb.h>
 #include <thread>
 #include <unistd.h>
-#include <netdb.h>
-#include <arpa/inet.h>
 
 //LISTENER FUNCTION FOR INCOMING UDP
 
