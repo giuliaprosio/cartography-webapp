@@ -14,6 +14,8 @@ JOBS              ?= $(shell nproc)
 CMAKE_FLAGS       ?=
 
 TARGET            ?= native
+BUILD_TYPE        ?= $(if $(filter native,$(TARGET)),Debug,Release)
+export BUILD_TYPE
 
 all: $(TARGET) frontend;
 
@@ -23,11 +25,11 @@ $(SUBDIRS):
 $(TARGETS): %: build-%
 	cmake --build $< --parallel $(JOBS)
 
-build-native: BUILD_TYPE ?= Debug
+build-native: TARGET = native
 build-native: Makefile CMakeLists.txt
 	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(CMAKE_FLAGS)
 
-build-greensoft: BUILD_TYPE ?= Release
+build-greensoft: TARGET = greensoft
 build-greensoft: Makefile CMakeLists.txt $(GREENSOFT_CC)
 	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
