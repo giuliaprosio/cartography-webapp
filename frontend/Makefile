@@ -5,10 +5,16 @@ CSS   = $(wildcard *.css)
 HTML  = $(wildcard *.html)
 SRC   = $(JS) $(CSS) $(HTML)
 
+ifeq (Release,$(BUILD_TYPE))
+BUILD = prod
+else
+BUILD = dev
+endif
+
 all: ../out/static/bundle.js
 
 ../out/static/bundle.js: $(SRC) node_modules
-	npm run build:prod
+	npm run build:$(BUILD)
 	touch $@
 
 dev: node_modules
