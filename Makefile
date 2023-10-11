@@ -33,18 +33,14 @@ build-greensoft: TARGET = greensoft
 build-greensoft: Makefile CMakeLists.txt $(GREENSOFT_CC)
 	cmake -S . -B $@ -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) $(CMAKE_FLAGS) -DCMAKE_C_COMPILER=$(abspath $(GREENSOFT_CC)) -DCMAKE_FIND_ROOT_PATH=$(abspath $(GREENSOFT_ROOT))
 
-$(GREENSOFT_CC): $(GREENSOFT_SDK_DIR)
-	make -C $< toolchain
-	make -C $< libcurl LIBCURL_VERSION=$(LIBCURL_VERSION)
+$(GREENSOFT_CC): $(GREENSOFT_SDK_DIR) Makefile
+	cp -ruT toolchain/overrides $<
+	make -C $< toolchain libcurl LIBCURL_VERSION=$(LIBCURL_VERSION)
 	touch $@
 
 $(GREENSOFT_SDK_DIR):
 	tar -xvf $(GREENSOFT_SDK_TAR)
 	mv $(GREENSOFT_SDK) $@
-	mkdir -p $@/dl
-	cp toolchain/.config $@
-	cp toolchain/011-fix-sigstksz.patch $@/package/m4
-	cat toolchain/libcurl.hash >> $@/package/libcurl/libcurl.hash
 
 cleanall: clean cleangreensoftsdk frontend debug;
 
