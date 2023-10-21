@@ -114,6 +114,8 @@ Allow giving your location possible in:
 Enable application site: http:// ene5ai-yoi-0#.gnyoi.com:18080,
 (# = router number).
 
+First version of the application 
+
 
 
 
