@@ -107,15 +107,19 @@ Then you can use this command tu run the debug simulation:
 ## Use 
 ### Share location permission
 Use the app on Chrome browser.
-Allow giving your location possible in:
+Allow giving your computer location possible in:
 * **Chrome**, in chrome://flags/#unsafely-treat-insecure-origin-as-secure.
 * **FireFox**, in devtools.serviceWorkers.testing.enabled setting in about:config
 
 Enable application site: http:// ene5ai-yoi-0#.gnyoi.com:18080,
 (# = router number).
 
-First version of the application 
+Possible to link the application to a GPS tracker application on your device to give more reliable data.
 
+### How will it look like
 
+Here a little preview of how the app will look like:
+
+![Immagine1](https://github.com/giuliaprosio/cartography-webapp/assets/82225149/88708d11-da5c-4b90-8f11-7e920dc61b53)
 
 
