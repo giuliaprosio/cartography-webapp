@@ -105,16 +105,19 @@ Then you can use this command tu run the debug simulation:
 
 
 ## Use 
-### Share location permission
-Use the app on Chrome browser.
-Allow giving your computer location possible in:
-* **Chrome**, in chrome://flags/#unsafely-treat-insecure-origin-as-secure.
-* **FireFox**, in devtools.serviceWorkers.testing.enabled setting in about:config
+The position estimations can be either displayed simply using the GPS sensor data 
+or the application can be connected to a python server to refine the probable 
+positions fusing the sensor data with the network topology information. 
 
-Enable application site: http:// ene5ai-yoi-0#.gnyoi.com:18080,
-(# = router number).
+The server uses Least Square Lateration and Unscented Kalman 
+Filters to combine the sensor data using the 
+associated covariance and smooth out the outliers. 
 
-Possible to link the application to a GPS tracker application on your device to give more reliable data.
+To overview the data fusion 
+algorithm, [here](https://github.com/giuliaprosio/Data-fusion-python-server) the link. 
+
+The [network](./network/) folder contains examples of the expected JSON and XML structs 
+containing the topology and sensor data. 
 
 ### How will it look like
 
